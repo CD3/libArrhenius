@@ -137,6 +137,13 @@ list( APPEND _${PROJECT_NAME}_INCLUDE_DIRS ${Boost_INCLUDE_DIRS} )
 find_package( Eigen3 REQUIRED )
 list( APPEND _${PROJECT_NAME}_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR} )
 
+# OpenMP parallelization
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
+
 # _           _ _     _ 
 #| |__  _   _(_) | __| |
 #| '_ \| | | | | |/ _` |
