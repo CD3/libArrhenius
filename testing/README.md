@@ -1,4 +1,8 @@
-Use this directory for unit tests. Unit tests are small program that call your
+Use this directory various test programs, such as unit tests and benchmarks.
+
+# Unit Tests
+
+Unit tests are small program that call your
 code and check that it returns what you expect. If you use the
 [Catch](https://github.com/philsquared/Catch) framework, all you need to do is create
 .cpp files in the `CatchTests` directory. The `CMakeLists.txt` file will automatically
@@ -17,3 +21,17 @@ header file.
 
 The `CMakeLists.txt` file included in this directory will automatically detect all .cpp files in the
 `CatchTests` directory.
+
+# Benchmarks
+
+Many benchmarking frameworks designed to behave similar to a unit test framework have started to appear.
+These frameworks allow you to quickly test the speed of snippets of code and provide the machinery to time
+these snippets, and compile them into a complete executable without having to write a `main` function.
+
+A couple of these frameworks are supported by the `CMakeLists.txt` file in this directory.
+
+- Nonius (https://nonius.io/): This is a header-only library that is easy to include in your project. Workflow is similar
+  to Catch, but not as polished.
+- Celero (https://github.com/DigitalInBlue/Celero): This framework supports "experiments" in which several snippets of code
+  can be compared to a baseline. It is useful to help decide what algorithms to use when developing, but it has to be compiled
+  so it is less trivial to add to your project.

@@ -97,7 +97,7 @@ if( EXISTS ${benchmark_DIR} )
 set(NONIUS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nonius CACHE PATH "")
 
 if( NOT EXISTS ${NONIUS_DIRECTORY} )
-  message(SEND_ERROR "Nonius directory not found. Please clone https://github.com/libnonius/nonius into ${NONIUS_DIRECTORY} or disable Nonius benchmarks." )
+  message(SEND_ERROR "Nonius directory not found. Please put the Nonius header directory at ${NONIUS_DIRECTORY} or disable Nonius benchmarks." )
 endif()
 
 # Search for sources.
