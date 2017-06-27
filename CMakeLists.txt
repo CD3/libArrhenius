@@ -21,7 +21,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #| .__/|_|  \___// |\___|\___|\__|  \___\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
 #|_|           |__/                                       |___/                                   
 
-project(Example) # replace Example with your project's name
+project(libArrhenius)
 
 # Sometimes you need/want to know if the project is being build as a standalone project (the user
 # is calling your CMakeLists.txt file directory) or as a sub-project (the user is calling
@@ -199,20 +199,20 @@ set( ${PROJECT_NAME}_SOURCES ${${PROJECT_NAME}_DETECTED_SOURCES}
 
 # If your project is a library, use add_library. The file that is created will be named lib<TARGET>, so
 # if your project name is libMPE for example, you would want to use MPE for <TARGET>.
-string( REGEX REPLACE "^lib" "" LIB_NAME ${PROJECT_NAME} )
-message( STATUS "library target name: ${LIB_NAME}" )
-add_library( ${LIB_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_EXTERNAL_SOURCES})
+#string( REGEX REPLACE "^lib" "" LIB_NAME ${PROJECT_NAME} )
+#message( STATUS "library target name: ${LIB_NAME}" )
+#add_library( ${LIB_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_EXTERNAL_SOURCES})
 
-set_target_properties( ${LIB_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION} CXX_STANDARD 11)
-target_link_libraries( ${LIB_NAME} ${Boost_LIBS} ) # add any link dependencies
+#set_target_properties( ${LIB_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION} CXX_STANDARD 11)
+#target_link_libraries( ${LIB_NAME} ${Boost_LIBS} )  add any link dependencies
 
 # Build applications
 
-if( Boost_PROGRAM_OPTIONS_FOUND )
-  add_executable( ${LIB_NAME}-cli applications/${LIB_NAME}-cli.cpp )
-  target_link_libraries( ${LIB_NAME}-cli ${LIB_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY} )
-  set_target_properties( ${LIB_NAME}-cli PROPERTIES CXX_STANDARD 11 )
-endif()
+#if( Boost_PROGRAM_OPTIONS_FOUND )
+  #add_executable( ${LIB_NAME}-cli applications/${LIB_NAME}-cli.cpp )
+  #target_link_libraries( ${LIB_NAME}-cli ${LIB_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY} )
+  #set_target_properties( ${LIB_NAME}-cli PROPERTIES CXX_STANDARD 11 )
+#endif()
 
 
 
