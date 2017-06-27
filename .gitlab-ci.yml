@@ -1,0 +1,18 @@
+# make sure code will build with gcc and pass tests
+build_and_test_gcc:
+  script:
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make
+    - make test
+# make sure code will build with clang and pass tests
+build_and_test_clang:
+  script:
+    - mkdir build
+    - cd build
+    - CC=clang CXX=clang++ cmake ..
+    - make
+    - make test
+
+
