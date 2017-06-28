@@ -40,7 +40,7 @@ class ThresholdCalculator<Integrator<Real,Method>> : public Integrator<Real,Meth
       Real *dT = new Real[N];
       Real *TT = new Real[N];
 
-      for(int i = 0; i < N; i++)
+      for(size_t i = 0; i < N; i++)
         dT[i] = T[i] - T[0];
 
       // the function that will be rooted

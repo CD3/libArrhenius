@@ -78,7 +78,7 @@ TEST_CASE( "ArrheniusIntegral With Boost.Multiprecision", "[trapezoid]" ) {
 
   cpp_dec_float_100 tau = 2;
   cpp_dec_float_100 dt = tau / 20;
-  size_t N = (4*tau / dt).convert_to<size_t>();
+  size_t N = (4*tau / dt).template convert_to<size_t>();
   std::vector<cpp_dec_float_100> t(N), T(N);
 
   for( size_t i = 0; i < t.size(); i++ )

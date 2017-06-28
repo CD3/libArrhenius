@@ -33,10 +33,13 @@ class ArrheniusIntegral<Real,Trapezoid> : ArrheniusIntegralBase<Real>
 
     Real operator()( std::size_t N, Real const *t, Real const *T )
     {
+      // see the celero benchmarks.
+      // using tmp variables and caching calls to exp() is *about*
+      // 3 times faster.
       Real sum = 0;
       Real alpha = -Ea/Constants::MKS::R;
       Real exp_last = exp( alpha/T[0] );
-      for(size_t i = 0; i < N; i++)
+      for(size_t i = 1; i < N; i++)
       {
         Real exp_now = exp( alpha/T[i]);
         sum += (exp_now + exp_last)*(t[i]-t[i-1]);
