@@ -71,6 +71,39 @@ TEST_CASE( "ArrheniusIntegral Usage", "[trapezoid]" ) {
 
 }
 
+TEST_CASE( "ArrheniusIntegral Large Profile", "[trapezoid]" ) {
+
+  // create a GIANT data set so we can test the parallelization.
+  double tau = 2;
+  double dt = tau / 200;
+  size_t N = 1000000000;
+  std::vector<double> t(N), T(N);
+
+  std::cout << "check point 1" << std::endl;
+  #pragma omp parallel for
+  for( size_t i = 0; i < t.size(); i++ )
+  {
+    t[i] = dt*i;
+    T[i] = 310;
+    if( t[i] > tau/2 )
+      T[i] = 100 + 310;
+    if( t[i] > tau + tau/2 )
+      T[i] = 310;
+  }
+
+  double A, Ea, Omega;
+
+  A = 3.1e99;
+  Ea = 6.28e5;
+
+  ArrheniusIntegral<double> Arr(A,Ea);
+  
+  std::cout << "check point 2" << std::endl;
+  Omega = Arr(N,t.data(),T.data());
+  CHECK( Omega == Approx(A*exp(-Ea/(MKS::R*410))*tau + A*exp(-Ea/(MKS::R*310))*3*tau) );
+
+}
+
 #include <boost/multiprecision/cpp_dec_float.hpp>
 using namespace boost::multiprecision;
 

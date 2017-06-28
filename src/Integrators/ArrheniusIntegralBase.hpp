@@ -16,6 +16,7 @@ class ArrheniusIntegralBase
 {
   protected:
     Real A, Ea;
+    size_t parallel_threshold = 4096;
 
   public:
 
@@ -24,6 +25,8 @@ class ArrheniusIntegralBase
 
     template<typename T>
     void setEa( T Ea_ ) { Ea = Ea_; }
+
+    void setParallelThreshold( size_t t ) { parallel_threshold = t; }
 
 
   protected:
