@@ -28,6 +28,9 @@ class ThresholdCalculator<Integrator<Real,Method>> : public Integrator<Real,Meth
   // by inheriting from the integrator, we can configure it directly through
   // the threshold calculator without writing wrapper functions.
 {
+  protected:
+    Real ThresholdOmega = 1;
+
   public:
     template<typename ...Args>
     ThresholdCalculator(Args&&... args)
@@ -37,6 +40,8 @@ class ThresholdCalculator<Integrator<Real,Method>> : public Integrator<Real,Meth
 
     virtual ~ThresholdCalculator () {};
 
+    void setThresholdOmega(Real O){ ThresholdOmega = O; }
+    Real getThresholdOmega() const {return ThresholdOmega;}
     Real operator()(size_t N, Real const *t, Real const *T) const
     {
       Real *dT = new Real[N];
@@ -59,9 +64,9 @@ class ThresholdCalculator<Integrator<Real,Method>> : public Integrator<Real,Meth
         Real Omega = Integrator<Real,Method>::operator()(N,t,TT);
 
         // damage will be between zero and infinity. we are looking for
-        // the value of x that will give Omega = 1, so return log of Omega.
+        // the value of x that will give Omega = ThresholdOmega, so return log of Omega/ThresholdOmega.
 
-        return log(Omega);
+        return log(Omega/ThresholdOmega);
       };
 
       eps_tolerance<double> tol( std::numeric_limits<Real>::digits - 3 ); // maximum precision we can reasonably expect to achieve.

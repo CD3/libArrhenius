@@ -117,6 +117,7 @@ namespace RUC
     int *n;
     ReadFunction(_in, _x, _y, n, _multiplicity);
     _n = n[0];
+    delete[] n;
   }
 }
 

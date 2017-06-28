@@ -57,6 +57,8 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
       ("Ea", po::value<DataType>()->default_value(6.28e5), "Activation energy.")
       ("A",  po::value<DataType>()->default_value(3.1e99), "Frequency factor.")
       ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
+      ("Omega", po::value<DataType>()->default_value(1), "Compute threshold corresponding to the value of Omega.")
+      ("write-threshold-profiles", "Write the threshold thermal profile to disk.")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -85,6 +87,7 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
     libArrhenius::ThresholdCalculator< libArrhenius::ArrheniusIntegral<DataType> > calc;
     calc.setA( vm["A"].as<DataType>() );
     calc.setEa( vm["Ea"].as<DataType>() );
+    calc.setThresholdOmega( vm["Omega"].as<DataType>() );
     
     std::cout<< "filename | Omega | threshold" << std::endl;
     for( auto file : vm["files"].as<std::vector<std::string>>() )
@@ -103,6 +106,22 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
 
       std::cout << file << " | " << Omega << " | " << Threshold << std::endl;
 
+      if( vm.count("write-threshold-profiles") )
+      {
+        DataType *TT = new DataType[n];
+        for(size_t i = 0; i < n; ++i)
+          TT[i] = Threshold*(T[i] - T[0]) + T[0];
+
+        std::string ofn = file+".threshold";
+        std::ofstream out( ofn );
+        for(size_t i = 0; i < n; i++)
+          out << t[i] << " " << TT[i] << "\n";
+        out.close();
+
+        delete[] TT;
+
+      }
+
       delete[] t;
       delete[] T;
     }
@@ -117,9 +136,65 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
 
 }
 
-int cmd_fit( std::vector<std::string> &args )
+void fit_help(std::string prog, std::string cmd, po::options_description& opts)
 {
+  std::cout << "Usage: " << prog << " [global options] "<< cmd << " ["<< cmd <<" options]\n" << std::endl;
+  std::cout << opts << std::endl;
+  std::cout << std::endl;
 }
+
+int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_args )
+{
+    po::options_description opt_options("Options");
+    opt_options.add_options()
+      // these are simple flag options, they do not have an argument.
+      ("help,h",  "print help message.")
+      ("methods,m"  , po::value<std::vector<std::string>>()->composing(), "List of fitting methods to use. Coefficients for each method will be printed.")
+      ;
+    po::options_description arg_options("Arguments");
+    arg_options.add_options()
+      ("files"  , po::value<std::vector<std::string>>()->composing(), "Thermal profile files to fit. These are ASSUMED to be threshold profiles.")
+      ;
+
+    po::options_description all_options("Options");
+    all_options.add(opt_options).add(arg_options);
+
+    // tell boost how to translate positional options to named options
+    po::positional_options_description args;
+    args.add("files"  , -1);
+    
+    // now actually oparse them
+    po::variables_map vm;
+    po::store(po::command_line_parser(cmd_args).  options(all_options).positional(args).run(), vm);
+    po::notify(vm);
+
+    if( vm.count("help") || vm.count("files") == 0 )
+    {
+      calc_help(prog,cmd,opt_options);
+      return 0;
+    }
+
+    std::vector<std::pair<std::string,std::string>> methods = {
+      {"Effective Exposure", "Computes an 'effective exposure' for each thermal profile and performs the standard linear regression method on them."}
+     ,{"Minimize log(A) Std Dev and Scaling Factors","Finds Ea that minimizes variance in A, then find A that minimizes required scaling factor."}
+    };
+
+    for( auto m : vm["methods"].as<std::vector<std::string>>())
+    {
+    }
+
+
+    
+    return 0;
+
+
+
+
+
+
+
+}
+
 
 
 
@@ -228,6 +303,9 @@ int main(int argc, const char** argv)
 
     if( vm["command"].as<std::string>() == "calc" )
       return calc_cmd( argv[0], "calc", cmd_args );
+
+    if( vm["command"].as<std::string>() == "fit" )
+      return fit_cmd( argv[0], "fit", cmd_args );
 
     
 

@@ -22,11 +22,14 @@ class ArrheniusIntegralBase
 
     template<typename T>
     void setA( T A_ ) { A = A_; }
+    Real getA( ) { return A; }
 
     template<typename T>
     void setEa( T Ea_ ) { Ea = Ea_; }
+    void getEa( ) const { return Ea; }
 
     void setParallelThreshold( size_t t ) { parallel_threshold = t; }
+    size_t getParallelThreshold( ) const { return parallel_threshold; }
 
 
   protected:
