@@ -1,11 +1,13 @@
 #include <iostream>
 #include <fstream>
-#include<boost/program_options.hpp>
+#include <boost/program_options.hpp>
 
-#include "Example.hpp"
+#include "Arrhenius.hpp"
 
 namespace po = boost::program_options;
 using namespace std;
+
+typedef double DataType;
 
 void print_manual()
 {
@@ -14,8 +16,7 @@ void print_manual()
   // each line or insert \n characters.
   std::cout << 
   R"(
-Write a short "manual" for the CLI here. This function will be called to when the user gives the --manual option.
-You do not need to summarize command line options here, that will be done by the boost library.
+  Under construction.
     )"
   << std::endl;
 }
@@ -39,16 +40,16 @@ int main(int argc, const char** argv)
       ("version", "print library version.")
       ("manual",    "print manual.")
       ("verbose,v", po::value<int>()->implicit_value(0), "verbose level.") // an option that takes an argument, but has a default value.
-      ("flag,f",    "A simple flag that takes no argument.")
-      ("option-with-arg,o", po::value<std::string>(), "An option that takes an argument.")
+      ("Ea", po::value<DataType>()->default_value(6.28e5), "Activation energy.")
+      ("A", po::value<DataType>()->default_value(3.1e99), "Frequency factor.")
+      ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
 
       ;
 
     // now define our arguments.
     po::options_description arg_options("Arguments");
     arg_options.add_options()
-      ("argument-1"  , po::value<std::string>(),   "The first argument.") // an option that can be given once
-      ("argument-remaining"  , po::value<std::vector<std::string>>()->composing(),   "All remaining arguments."); // an option that can be given multiple times with each argument getting stored in a vector.
+      ("files"  , po::value<std::vector<std::string>>()->composing(),   "Thermal profile files to analyze."); // an option that can be given multiple times with each argument getting stored in a vector.
 
     // combine the options and arguments into one option list.
     // this is what we will use to parse the command line, but
@@ -59,8 +60,7 @@ int main(int argc, const char** argv)
 
     // tell boost how to translate positional options to named options
     po::positional_options_description args;
-    args.add("argument-1", 1); // first argument will be mapped to argument-1
-    args.add("argument-remaining", -1);  // remaining arguments will be mapped to argument-remaining
+    args.add("files", -1);  // remaining arguments will be mapped to argument-remaining
 
     po::variables_map vm;
     po::store(po::command_line_parser(argc, argv).  options(all_options).positional(args).run(), vm);
@@ -87,7 +87,7 @@ int main(int argc, const char** argv)
     if( vm.count("version") )
     {
       // print the version number for the library
-      std::cout << "Example "<<Example_VERSION_FULL << std::endl;
+      std::cout << "libArrhenius "<<libArrhenius_VERSION_FULL << std::endl;
       return 0;
     }
 
@@ -98,29 +98,30 @@ int main(int argc, const char** argv)
     // below is an example of how to use the command line parser to access the options and arguments that
     // where passed.
     
-    if( vm.count("flag") )
-      std::cout << "'flag' was given." << std::endl;
-    else
-      std::cout << "'flag' NOT was given." << std::endl;
-
-    if( vm.count("option-with-arg") )
-      std::cout << "'option-with-arg' was given. value: " << vm["option-with-arg"].as<std::string>() << std::endl;
-    else
-      std::cout << "'option-with-arg' NOT was given." << std::endl;
-
-    if( vm.count("argument-1") )
-      std::cout << "'argument-1' was given. value: " << vm["argument-1"].as<std::string>() << std::endl;
-    else
-      std::cout << "'argument-1' NOT was given." << std::endl;
-
-    if( vm.count("argument-remaining") )
+    libArrhenius::ThresholdCalculator< libArrhenius::ArrheniusIntegral<DataType> > calc;
+    calc.setA( vm["A"].as<DataType>() );
+    calc.setEa( vm["Ea"].as<DataType>() );
+    
+    std::cout<< "filename | Omega | threshold" << std::endl;
+    for( auto file : vm["files"].as<std::vector<std::string>>() )
     {
-      std::cout << "'argument-remaining' was given. " << vm["argument-remaining"].as<std::vector<std::string>>().size() << " values:" << std::endl;
-      for(int i = 0; i < vm["argument-remaining"].as<std::vector<std::string>>().size(); i++)
-        std::cout<<"\t"<<vm["argument-remaining"].as<std::vector<std::string>>()[i]<<std::endl;
+      int n;
+      DataType *t, *T;
+
+      std::ifstream in(file.c_str());
+      RUC::ReadFunction(in, t, T, n);
+      in.close();
+      // add offset temp
+      std::transform( T, T+n, T, std::bind2nd(std::plus<DataType>(), vm["T0"].as<DataType>()) );
+
+      auto Omega = calc.Omega(n,t,T);
+      auto Threshold = calc(n,t,T);
+
+      std::cout << file << " | " << Omega << " | " << Threshold << std::endl;
+
+      delete[] t;
+      delete[] T;
     }
-    else
-      std::cout << "'argument-remaining' NOT was given." << std::endl;
     
 
 

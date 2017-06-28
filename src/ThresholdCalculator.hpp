@@ -13,6 +13,8 @@ using boost::math::tools::eps_tolerance;
   * @date 06/26/17
   */
 
+namespace libArrhenius {
+
 /** @class ThresholdCalculator
   * @brief 
   * @author C.D. Clark III
@@ -35,7 +37,7 @@ class ThresholdCalculator<Integrator<Real,Method>> : public Integrator<Real,Meth
 
     virtual ~ThresholdCalculator () {};
 
-    Real operator()(size_t N, Real const *t, Real const *T)
+    Real operator()(size_t N, Real const *t, Real const *T) const
     {
       Real *dT = new Real[N];
       Real *TT = new Real[N];
@@ -81,7 +83,13 @@ class ThresholdCalculator<Integrator<Real,Method>> : public Integrator<Real,Meth
       
     }
 
+    Real Omega(size_t N, Real const *t, Real const *T) const
+    {
+      return Integrator<Real,Method>::operator()(N,t,T);
+    }
+
   protected:
 };
 
+}
 #endif // include protector

@@ -24,6 +24,8 @@ class ArrheniusIntegral<Real,Trapezoid> : ArrheniusIntegralBase<Real>
       setA(A_);
       setEa(Ea_);
     }
+    ArrheniusIntegral( )
+    {}
     virtual ~ArrheniusIntegral () {};
 
     using ArrheniusIntegralBase<Real>::setA;
@@ -31,7 +33,7 @@ class ArrheniusIntegral<Real,Trapezoid> : ArrheniusIntegralBase<Real>
 
 
 
-    Real operator()( std::size_t N, Real const *t, Real const *T )
+    Real operator()( std::size_t N, Real const *t, Real const *T ) const
     {
       // see the celero benchmarks.
       // using tmp variables and caching calls to exp() is *about*

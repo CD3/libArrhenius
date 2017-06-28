@@ -100,9 +100,30 @@ BENCHMARK_F(TrapezoidIntegral, TmpVarsAndCache, Fixture, 100, 100)
     double sum = 0;
     double alpha = -Ea/8.314;
     double exp_last = exp( alpha/T[0] );
-    for(int64_t i = 1; i < this->size; i++)
+    for(int64_t i = 1; i < size; i++)
     {
       double exp_now = exp( alpha/T[i]);
+      sum += (exp_now + exp_last)*(t[i]-t[i-1]);
+      exp_last = exp_now;
+    }
+    sum *= 0.5*A;
+}
+
+BENCHMARK_F(TrapezoidIntegral, TmpVarsAndCache2, Fixture, 100, 100)
+{
+    double sum = 0;
+    double alpha = -Ea/8.314;
+    double exp_last;
+    bool have_last = false;
+    for(int64_t i = 0; i < size; i++)
+    {
+      double exp_now = exp( alpha/T[i] );
+      if(!have_last)
+      {
+        exp_last = exp_now;
+        have_last = true;
+        continue;
+      }
       sum += (exp_now + exp_last)*(t[i]-t[i-1]);
       exp_last = exp_now;
     }
@@ -114,7 +135,7 @@ BENCHMARK_F(TrapezoidIntegral, OpenMPParallel, Fixture, 100, 100)
 {
     double sum = 0;
     #pragma omp parallel for reduction(+:sum)
-    for(int64_t i = 0; i < this->size-1; i++)
+    for(int64_t i = 0; i < size-1; i++)
       sum += ( exp( -Ea/8.314/T[i]) + exp( -Ea/8.314/T[i+1]) )*(t[i+1]-t[i]);
     sum *= 0.5*A;
 }
@@ -126,19 +147,30 @@ BENCHMARK_F(TrapezoidIntegral, OpenMPParallelAndCache, Fixture, 100, 100)
     // we need to have some way for each thread to tell if they have cached the first
     // calculation or not.
     double exp_last;
-    bool have_last = False;
-    #pragma omp parallel for reduction(+:sum) firstprivate(have_last,exp_last) schedule(static,256)
-    for(int64_t i = 1; i < this->size; i++)
+    bool have_last = false;
+
+#define LOOP \
+    for(int64_t i = 0; i < size; i++) \
+    { \
+      double exp_now = exp( alpha/T[i] ); \
+      if(!have_last) \
+      { \
+        exp_last = exp_now; \
+        have_last = true; \
+        continue; \
+      } \
+      sum += (exp_now + exp_last)*(t[i]-t[i-1]); \
+      exp_last = exp_now; \
+    } \
+
+    if(size < 4000)
     {
-      double exp_now = exp( alpha/T[i] );
-      if(!have_last)
-      {
-        exp_last = exp_now;
-        have_last = True;
-        continue;
-      }
-      sum += (exp_now + exp_last.get())*(t[i]-t[i-1]);
-      exp_last = exp_now;
+      LOOP
+    }
+    else
+    {
+    #pragma omp parallel for schedule(static) reduction(+:sum) firstprivate(have_last) private(exp_last)
+    LOOP
     }
     sum *= 0.5*A;
 }
