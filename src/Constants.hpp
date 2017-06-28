@@ -10,7 +10,7 @@
 namespace libArrhenius {
 namespace Constants {
 namespace MKS {
-  static double const GasConstant = 8.315;
+  static double const GasConstant = 8.3144598;
   static double const R = GasConstant;
 }
 
