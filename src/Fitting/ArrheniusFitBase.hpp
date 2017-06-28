@@ -7,6 +7,8 @@
   * @date 06/28/17
   */
 
+#include <boost/optional.hpp>
+
 namespace libArrhenius {
 
 /** @class ArrheniusFitBase
@@ -37,6 +39,11 @@ class ArrheniusFitBase
       T.clear();
       N.clear();
     }
+
+    struct ArrheniusFitReturn
+    {
+      boost::optional<Real> A, Ea;
+    };
 
   protected:
 };
