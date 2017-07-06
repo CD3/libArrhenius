@@ -7,6 +7,7 @@
   * @date 06/28/17
   */
 #include<boost/optional.hpp>
+#include"ArrheniusFitInterface.hpp"
 
 namespace libArrhenius {
 
@@ -15,7 +16,7 @@ namespace libArrhenius {
   * @author C.D. Clark III
   */
 template<typename Real>
-class ArrheniusFitBase
+class ArrheniusFitBase : public ArrheniusFitInterface<Real>
 {
   protected:
     std::vector<Real*> t,T;
@@ -38,11 +39,6 @@ class ArrheniusFitBase
       T.clear();
       N.clear();
     }
-
-    struct Return
-    {
-      boost::optional<Real> A, Ea;
-    };
 
   protected:
 };

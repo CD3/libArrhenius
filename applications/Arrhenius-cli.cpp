@@ -10,7 +10,16 @@ using namespace boost::multiprecision;
 namespace po = boost::program_options;
 using namespace std;
 
-typedef double DataType;
+typedef cpp_dec_float_100 DataType;
+typedef cpp_dec_float_100 HPDataType; // high precision data type
+
+namespace std {
+  std::string to_string(cpp_dec_float_100 val)
+  {return static_cast<std::string>( val ); }
+
+  std::string to_string(cpp_dec_float_50 val)
+  {return static_cast<std::string>( val ); }
+}
 
 std::vector<std::pair<std::string,std::string>> cmds = { {"help","Print usage and exit."}
                                                        , {"calc","Perform various calculations on thermal profile data"}
@@ -152,9 +161,9 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       // these are simple flag options, they do not have an argument.
       ("help,h",  "print help message.")
       ("methods,m"  , po::value<std::vector<std::string>>()->composing(), "List of fitting methods to use. Coefficients for each method will be printed.")
-      ("T0", po::value<cpp_dec_float_100>()->default_value(0), "Offset temperature (in K) that will be added to all thermal profiles.")
-      ("T0-uncertainty", po::value<cpp_dec_float_100>(), "Uncertainty in baseline temperature (in K).")
-      ("dT-uncertainty", po::value<cpp_dec_float_100>(), "Uncertainty in temperature rise (in K).")
+      ("T0", po::value<HPDataType>()->default_value(0), "Offset temperature (in K) that will be added to all thermal profiles.")
+      ("T0-uncertainty", po::value<HPDataType>(), "Uncertainty in baseline temperature (in K).")
+      ("dT-uncertainty", po::value<HPDataType>(), "Uncertainty in temperature rise (in K).")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -182,26 +191,25 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
 
     // read in thermal profiles
     std::cout << "Loading thermal profiles." << std::endl;
-    std::vector<std::shared_ptr<cpp_dec_float_100>> ts,Ts;
+    std::vector<std::shared_ptr<HPDataType>> ts,Ts;
     std::vector<size_t> Ns;
     for( auto file : vm["files"].as<std::vector<std::string>>() )
     {
       int n;
-      cpp_dec_float_100 *t, *T;
+      HPDataType *t, *T;
 
       std::ifstream in(file.c_str());
       RUC::ReadFunction(in, t, T, n);
       in.close();
       // add offset temp
-      std::transform( T, T+n, T, std::bind2nd(std::plus<cpp_dec_float_100>(), vm["T0"].as<cpp_dec_float_100>()) );
+      std::transform( T, T+n, T, std::bind2nd(std::plus<HPDataType>(), vm["T0"].as<HPDataType>()) );
 
       // we need to wrap these in shared_ptr's so we don't leak memory
       Ns.push_back(n);
-      ts.push_back( std::shared_ptr<cpp_dec_float_100>( t ) );
-      Ts.push_back( std::shared_ptr<cpp_dec_float_100>( T ) );
+      ts.push_back( std::shared_ptr<HPDataType>( t ) );
+      Ts.push_back( std::shared_ptr<HPDataType>( T ) );
 
     }
-
 
 
 
@@ -224,93 +232,113 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
         methods.push_back(m.first);
     }
 
+
+    // loop through various fit methods
     for( auto m : methods )
     {
       std::transform( m.begin(), m.end(), m.begin(), ::tolower);
 
       std::cout << "Running " << m << " method." << std::endl;
 
-      typedef libArrhenius::ArrheniusFitBase<cpp_dec_float_100>::Return Coeffs;
+      typedef libArrhenius::ArrheniusFitInterface<HPDataType>::Return Coeffs;
       Coeffs coefficients;
       Coeffs coefficients_err;
 
+      std::shared_ptr< libArrhenius::ArrheniusFitInterface< HPDataType> > fit;
 
-      // aliases
+      // support aliases
       if(m == "minimize log(a) variance and scaling factors")
         m = "clark";
 
+
+      // get the correct fitter
       if(m == "clark")
+        fit.reset( new libArrhenius::ArrheniusFit< HPDataType, libArrhenius::MinimizeLogAVarianceAndScalingFactors >());
+
+
+      // now fit the profiles
+      for( int i = 0; i < Ns.size(); ++i )
+        fit->addProfile( Ns[i], ts[i].get(), Ts[i].get() );
+
+      coefficients = fit->exec();
+
+      std::vector< Coeffs > errors;
+
+      // propagate error for uncertainty in baseline temperature if given
+      if( vm.count("T0-uncertainty") )
       {
-        libArrhenius::ArrheniusFit< cpp_dec_float_100, libArrhenius::MinimizeLogAVarianceAndScalingFactors > fit;
+        fit->clear();
+        // add uncertainty to the thermal profiles and add them to the fitter
         for( int i = 0; i < Ns.size(); ++i )
-          fit.addProfile( Ns[i], ts[i].get(), Ts[i].get() );
-
-        coefficients = fit.exec();
-
-        std::vector< Coeffs > errors;
-
-        if( vm.count("T0-uncertainty") )
         {
-          fit.clear();
-          // add uncertainty to the thermal profiles and add them to the fitter
-          for( int i = 0; i < Ns.size(); ++i )
-          {
-            std::transform( Ts[i].get(), Ts[i].get()+Ns[i], Ts[i].get(), std::bind2nd(std::plus<cpp_dec_float_100>(), vm["T0-uncertainty"].as<cpp_dec_float_100>()) );
-            fit.addProfile( Ns[i], ts[i].get(), Ts[i].get() );
-          }
-
-          errors.push_back(fit.exec());
-
-          // subtract the uncertainty back off the thermal profiles
-          for( int i = 0; i < Ns.size(); ++i )
-            std::transform( Ts[i].get(), Ts[i].get()+Ns[i], Ts[i].get(), std::bind2nd(std::minus<cpp_dec_float_100>(), vm["T0-uncertainty"].as<cpp_dec_float_100>()) );
+          std::transform( Ts[i].get(), Ts[i].get()+Ns[i], Ts[i].get(), std::bind2nd(std::plus<HPDataType>(), vm["T0-uncertainty"].as<HPDataType>()) );
+          fit->addProfile( Ns[i], ts[i].get(), Ts[i].get() );
         }
 
-        if( vm.count("dT-uncertainty") )
-        {
-          fit.clear();
-          // add uncertainty to the thermal profiles and add them to the fitter
-          for( int i = 0; i < Ns.size(); ++i )
-          {
-            cpp_dec_float_100 Tmax = *std::max_element( Ts[i].get(), Ts[i].get() + Ns[i] );
-            cpp_dec_float_100 scale = 1 + vm["dT-uncertainty"].as<cpp_dec_float_100>()/(Tmax - Ts[i].get()[0]);
-            for( int j = 0; j < Ns[i]; j++)
-              Ts[i].get()[j] = Ts[i].get()[0] + scale*(Ts[i].get()[j] - Ts[i].get()[0]);
+        errors.push_back(fit->exec());
 
-            fit.addProfile( Ns[i], ts[i].get(), Ts[i].get() );
-          }
-
-          errors.push_back(fit.exec());
-
-          // subtract the uncertainty back off the thermal profiles
-          for( int i = 0; i < Ns.size(); ++i )
-          {
-            cpp_dec_float_100 Tmax = *std::max_element( Ts[i].get(), Ts[i].get() + Ns[i] );
-            cpp_dec_float_100 scale = 1 - vm["dT-uncertainty"].as<cpp_dec_float_100>()/(Tmax - Ts[i].get()[0]);
-            for( int j = 0; j < Ns[i]; j++)
-              Ts[i].get()[j] = Ts[i].get()[0] + scale*(Ts[i].get()[j] - Ts[i].get()[0]);
-          }
-
-        }
-
-        coefficients_err.A = 0;
-        coefficients_err.Ea = 0;
-        for( auto e : errors )
-        {
-          auto dA  = e.A.get() - coefficients.A.get();
-          auto dEa = e.Ea.get() - coefficients.Ea.get();
-          coefficients_err.A  = coefficients_err.A.get()  + dA*dA;
-          coefficients_err.Ea = coefficients_err.Ea.get() + dEa*dEa;
-        }
-        coefficients_err.A  = sqrt(coefficients_err.A.get());
-        coefficients_err.Ea = sqrt(coefficients_err.Ea.get());
-
+        // subtract the uncertainty back off the thermal profiles
+        for( int i = 0; i < Ns.size(); ++i )
+          std::transform( Ts[i].get(), Ts[i].get()+Ns[i], Ts[i].get(), std::bind2nd(std::minus<HPDataType>(), vm["T0-uncertainty"].as<HPDataType>()) );
       }
+
+      // propagate error for peak temperature rise if given
+      if( vm.count("dT-uncertainty") )
+      {
+        fit->clear();
+        // add uncertainty to the thermal profiles and add them to the fitter
+        for( int i = 0; i < Ns.size(); ++i )
+        {
+          HPDataType Tmax = *std::max_element( Ts[i].get(), Ts[i].get() + Ns[i] );
+          HPDataType scale = 1 + vm["dT-uncertainty"].as<HPDataType>()/(Tmax - Ts[i].get()[0]);
+          for( int j = 0; j < Ns[i]; j++)
+            Ts[i].get()[j] = Ts[i].get()[0] + scale*(Ts[i].get()[j] - Ts[i].get()[0]);
+
+          fit->addProfile( Ns[i], ts[i].get(), Ts[i].get() );
+        }
+
+        errors.push_back(fit->exec());
+
+        // subtract the uncertainty back off the thermal profiles
+        for( int i = 0; i < Ns.size(); ++i )
+        {
+          HPDataType Tmax = *std::max_element( Ts[i].get(), Ts[i].get() + Ns[i] );
+          HPDataType scale = 1 - vm["dT-uncertainty"].as<HPDataType>()/(Tmax - Ts[i].get()[0]);
+          for( int j = 0; j < Ns[i]; j++)
+            Ts[i].get()[j] = Ts[i].get()[0] + scale*(Ts[i].get()[j] - Ts[i].get()[0]);
+        }
+      }
+
+
+      // compute total error
+      coefficients_err.A = 0;
+      coefficients_err.Ea = 0;
+      for( auto e : errors )
+      {
+        auto dA  = e.A.get() - coefficients.A.get();
+        auto dEa = e.Ea.get() - coefficients.Ea.get();
+        coefficients_err.A  = coefficients_err.A.get()  + dA*dA;
+        coefficients_err.Ea = coefficients_err.Ea.get() + dEa*dEa;
+      }
+      coefficients_err.A  = sqrt(coefficients_err.A.get());
+      coefficients_err.Ea = sqrt(coefficients_err.Ea.get());
+
 
       std::cout << "A: " << coefficients.A.get()   << " +/- " << coefficients_err.A.get() << std::endl;
       std::cout << "Ea: " << coefficients.Ea.get() << " +/- " << coefficients_err.Ea.get() << std::endl;
 
+      std::vector<std::string> calc_args;
+
+      calc_args.push_back( "--A="+ std::to_string( coefficients.A.get() ) );
+      calc_args.push_back( "--Ea="+std::to_string( coefficients.Ea.get()) );
+      calc_args.push_back( "--T0="+std::to_string( vm["T0"].as<HPDataType>()) );
+      calc_args.push_back( "--Omega=1");
+      for( auto file : vm["files"].as<std::vector<std::string>>() )
+        calc_args.push_back( file );
+      calc_cmd( prog, "calc", calc_args );
+
     }
+
 
 
     
