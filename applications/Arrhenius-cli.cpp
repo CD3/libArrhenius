@@ -2,6 +2,8 @@
 #include <fstream>
 #include <algorithm>
 #include <boost/program_options.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+using namespace boost::multiprecision;
 
 #include "Arrhenius.hpp"
 
@@ -150,6 +152,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       // these are simple flag options, they do not have an argument.
       ("help,h",  "print help message.")
       ("methods,m"  , po::value<std::vector<std::string>>()->composing(), "List of fitting methods to use. Coefficients for each method will be printed.")
+      ("T0", po::value<cpp_dec_float_100>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -163,7 +166,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
     po::positional_options_description args;
     args.add("files"  , -1);
     
-    // now actually oparse them
+    // now actually parse them
     po::variables_map vm;
     po::store(po::command_line_parser(cmd_args).  options(all_options).positional(args).run(), vm);
     po::notify(vm);
@@ -174,13 +177,73 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       return 0;
     }
 
-    std::vector<std::pair<std::string,std::string>> methods = {
+
+    // read in thermal profiles
+    std::vector<std::shared_ptr<cpp_dec_float_100>> ts,Ts;
+    std::vector<size_t> Ns;
+    for( auto file : vm["files"].as<std::vector<std::string>>() )
+    {
+      int n;
+      cpp_dec_float_100 *t, *T;
+
+      std::ifstream in(file.c_str());
+      RUC::ReadFunction(in, t, T, n);
+      in.close();
+      // add offset temp
+      std::transform( T, T+n, T, std::bind2nd(std::plus<cpp_dec_float_100>(), vm["T0"].as<cpp_dec_float_100>()) );
+
+      // we need to wrap these in shared_ptr's so we don't leak memory
+      Ns.push_back(n);
+      ts.push_back( std::shared_ptr<cpp_dec_float_100>( t ) );
+      Ts.push_back( std::shared_ptr<cpp_dec_float_100>( T ) );
+
+    }
+
+
+
+
+
+
+    std::vector<std::pair<std::string,std::string>> supported_methods = {
       {"Effective Exposure", "Computes an 'effective exposure' for each thermal profile and performs the standard linear regression method on them."}
-     ,{"Minimize log(A) Std Dev and Scaling Factors","Finds Ea that minimizes variance in A, then find A that minimizes required scaling factor."}
+     ,{"Minimize log(A) Variance and Scaling Factors","Finds Ea that minimizes variance in A, then find A that minimizes required scaling factor errors."}
     };
 
-    for( auto m : vm["methods"].as<std::vector<std::string>>())
+    std::vector<std::string> methods;
+    if( vm.count("methods") )
     {
+      for( auto m : vm["methods"].as<std::vector<std::string>>() )
+        methods.push_back(m);
+    }
+    else
+    {
+      for( auto m : supported_methods )
+        methods.push_back(m.first);
+    }
+
+    for( auto m : methods )
+    {
+      std::transform( m.begin(), m.end(), m.begin(), ::tolower);
+
+      std::cout << "Running " << m << " method." << std::endl;
+
+      // aliases
+      if(m == "minimize log(a) variance and scaling factors")
+        m = "clark";
+
+      if(m == "clark")
+      {
+        libArrhenius::ArrheniusFit< cpp_dec_float_100, libArrhenius::MinimizeLogAVarianceAndScalingFactors > fit;
+        for( int i = 0; i < Ns.size(); ++i )
+          fit.addProfile( Ns[i], ts[i].get(), Ts[i].get() );
+
+        auto coefficients = fit.exec();
+        
+        std::cout << "A: " << coefficients.A.get() << std::endl;
+        std::cout << "Ea: " << coefficients.Ea.get() << std::endl;
+
+      }
+
     }
 
 

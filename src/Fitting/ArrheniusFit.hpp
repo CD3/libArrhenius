@@ -11,7 +11,7 @@
 
 namespace libArrhenius {
 
-struct MinimizeLogAStdDevAndScalingFactors {};
+struct MinimizeLogAVarianceAndScalingFactors {};
 struct EffectiveExposureLinearRegression {};
 struct ConstantTempeLinearRegression {};
 
@@ -19,13 +19,13 @@ struct ConstantTempeLinearRegression {};
   * @brief 
   * @author C.D. Clark III
   */
-template<typename Real, typename Method = MinimizeLogAStdDevAndScalingFactors>
+template<typename Real, typename Method = MinimizeLogAVarianceAndScalingFactors>
 class ArrheniusFit {};
 
 }
 
 // include specific implementations here as they
 // won't work if the user tries to include them directly
-#include "./detail/MinimizeLogAStdDevAndScalingFactors.hpp"
+#include "./detail/MinimizeLogAVarianceAndScalingFactors.hpp"
 
 #endif // include protector

@@ -2,4 +2,5 @@
 #include "ThresholdCalculator.hpp"
 #include "Utils/ReadFunction.hpp"
 #include "Integration/ArrheniusIntegral.hpp"
+#include "Fitting/ArrheniusFit.hpp"
 

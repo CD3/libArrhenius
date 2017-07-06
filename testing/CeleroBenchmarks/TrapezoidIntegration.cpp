@@ -21,10 +21,10 @@ class Fixture : public celero::TestFixture
     virtual std::vector<std::pair<int64_t, uint64_t>> getExperimentValues() const override
     {
       std::vector<std::pair<int64_t, uint64_t>> problemSpace;
-      const int runs = 6;
+      const int runs = 4;
       for( int i = 0; i < runs; i++)
       {
-        problemSpace.push_back(std::make_pair(int64_t(pow(2,2*i+6)),uint64_t(0)));
+        problemSpace.push_back(std::make_pair(int64_t(pow(8,2*(i+1))),uint64_t(0)));
       }
 
       return problemSpace;
@@ -155,7 +155,7 @@ BENCHMARK_F(TrapezoidIntegral, OpenMPParallelAndCache, Fixture, 100, 100)
       double exp_now = exp( alpha/T[i] ); \
       if(!have_last) \
       { \
-        exp_last = exp_now; \
+        exp_last = exp_now; 3
         have_last = true; \
         continue; \
       } \
@@ -175,3 +175,46 @@ BENCHMARK_F(TrapezoidIntegral, OpenMPParallelAndCache, Fixture, 100, 100)
     sum *= 0.5*A;
 }
 
+BENCHMARK_F(TrapezoidIntegral, OpenMPManualParallelAndCache, Fixture, 100, 100)
+{
+    double global_sum = 0;
+    double alpha = -Ea/8.314;
+    // we need to have some way for each thread to tell if they have cached the first
+    // calculation or not.
+
+#define LOOP \
+    for(int64_t i = 0; i < size; i++) \
+    { \
+      double exp_now = exp( alpha/T[i] ); \
+      if(!have_last) \
+      { \
+        exp_last = exp_now; \
+        have_last = true; \
+        continue; \
+      } \
+      sum += (exp_now + exp_last)*(t[i]-t[i-1]); \
+      exp_last = exp_now; \
+    } \
+
+    if(size < 4000)
+    {
+      double sum = 0;
+      double exp_last;
+      bool have_last = false;
+      LOOP
+    }
+    else
+    {
+      #pragma omp parallel
+      {
+        double sum = 0;
+        double exp_last;
+        bool have_last = false;
+        #pragma omp for schedule(static)
+        LOOP
+        #pragma omp atomic
+          global_sum += sum;
+      }
+    }
+    global_sum *= 0.5*A;
+}

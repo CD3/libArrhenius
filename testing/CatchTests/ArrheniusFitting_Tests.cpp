@@ -30,9 +30,10 @@ TEST_CASE( "ArrheniusFitter Usage", "[usage]" ) {
 
   for( auto tau : taus )
   {
-    double dt = tau / 20;
+    double dt = tau / 2000;
     double total_time = 4*tau;
     size_t N = total_time / dt;
+    std::cout << "N: " << N << std::endl;
 
     Ns.push_back( N );
     ts.push_back( std::shared_ptr<DataType>( new DataType[N] ) );
@@ -56,7 +57,7 @@ TEST_CASE( "ArrheniusFitter Usage", "[usage]" ) {
     }
 
     auto Omega = calc.Omega(Ns[j],ts[j].get(),Ts[j].get());
-    REQUIRE( static_cast<double>(Omega) == Approx(1) );
+    CHECK( static_cast<double>(Omega) == Approx(1) );
 
     fit.addProfile( Ns[j], ts[j].get(), Ts[j].get() );
   }

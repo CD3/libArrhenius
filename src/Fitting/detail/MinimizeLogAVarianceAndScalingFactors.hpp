@@ -1,7 +1,7 @@
-#ifndef Fitting_MinimizeLogAStdDevAndScalingFactors_hpp
-#define Fitting_MinimizeLogAStdDevAndScalingFactors_hpp
+#ifndef Fitting_MinimizeLogAVarianceAndScalingFactors_hpp
+#define Fitting_MinimizeLogAVarianceAndScalingFactors_hpp
 
-/** @file MinimizeLogAStdDevAndScalingFactors.hpp
+/** @file MinimizeLogAVarianceAndScalingFactors.hpp
   * @brief 
   * @author C.D. Clark III
   * @date 06/28/17
@@ -22,12 +22,12 @@ using boost::math::tools::eps_tolerance;
 
 namespace libArrhenius {
 
-/** @class MinimizeLogAStdDevAndScalingFactors
+/** @class MinimizeLogAVarianceAndScalingFactors
   * @brief 
   * @author C.D. Clark III
   */
 template<typename Real>
-class ArrheniusFit<Real,MinimizeLogAStdDevAndScalingFactors> : public ArrheniusFitBase<Real>
+class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public ArrheniusFitBase<Real>
 {
   protected:
     
