@@ -1,5 +1,5 @@
-#ifndef Integrators_ArrheniusIntegral_hpp
-#define Integrators_ArrheniusIntegral_hpp
+#ifndef Integration_ArrheniusIntegral_hpp
+#define Integration_ArrheniusIntegral_hpp
 
 /** @file ArrheniusIntegral.hpp
   * @brief 
@@ -9,10 +9,12 @@
 
 #include <cmath>
 
-#include "Types.hpp"
 #include "Constants.hpp"
+#include "ArrheniusIntegralBase.hpp"
 
 namespace libArrhenius {
+
+struct Trapezoid {};
 
 /** @class ArrheniusIntegral
   * @brief 
@@ -24,8 +26,8 @@ class ArrheniusIntegral {};
 }
 
 // include specific implementations here as they
-// cannot be included by the user directly.
-#include "ArrheniusIntegral_Trapezoid.hpp"
+// won't work if the user tries to include them directly
+#include "./detail/Trapezoid.hpp"
 
 
 #endif // include protector

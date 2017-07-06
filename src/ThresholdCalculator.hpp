@@ -59,26 +59,29 @@ class ThresholdCalculator<Integrator<Real,Method>> : public Integrator<Real,Meth
         for(size_t i = 0; i < N; i++)
           TT[i] = T[0] + x*dT[i];
         
-
         // calculate damage parameter
         Real Omega = Integrator<Real,Method>::operator()(N,t,TT);
 
         // damage will be between zero and infinity. we are looking for
         // the value of x that will give Omega = ThresholdOmega, so return log of Omega/ThresholdOmega.
 
-        return log(Omega/ThresholdOmega);
+        // I don't know what log(Omega/ThresholdOmega) returns, but
+        // if this static cast isn't in place, we get a segmentation fault
+        // when trying to use it with the boost.multiprecision float types.
+        return static_cast<Real>(log(Omega/ThresholdOmega));
       };
 
-      eps_tolerance<double> tol( std::numeric_limits<Real>::digits - 3 ); // maximum precision we can reasonably expect to achieve.
+      eps_tolerance<Real> tol( std::numeric_limits<Real>::digits - 3 ); // maximum precision we can reasonably expect to achieve.
       boost::uintmax_t it = 100;  // maximum number of iterations to all the algorithm to try.
 
       // CAREFULE: make sure initial guess is not an integer!
       Real guess = 1.0;
+      Real factor = 2.0;
 
       if( f(0) > 0 )
         guess = -1.0;
 
-      auto min_max = bracket_and_solve_root(f, guess, 2., true, tol, it);
+      auto min_max = bracket_and_solve_root(f, guess, factor, true, tol, it);
 
       // clean up our memory
       delete[] dT;

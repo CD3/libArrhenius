@@ -1,37 +1,37 @@
-#ifndef Integrators_ArrheniusIntegral_Trapezoid_hpp
-#define Integrators_ArrheniusIntegral_Trapezoid_hpp
+#ifndef Integration_Methods_Trapezoid_hpp
+#define Integration_Methods_Trapezoid_hpp
 
-/** @file ArrheniusIntegral_Trapezoid.hpp
-  * @brief 
+
+/** @file Trapezoid.hpp
+  * @brief Contains ArrheniusIntegral class specialization for trapezoid method.
   * @author C.D. Clark III
   * @date 06/26/17
+  *
+  * NOTE: This file is expected to be included from the ArrheniusIntegral.hpp
+  * It does not include any of the headers that are already included there, which
+  * only works if the contents of ArrheniusIntegral.hpp is included first.
   */
-
-#include "ArrheniusIntegralBase.hpp"
 
 namespace libArrhenius {
 
 template <typename Real>
-class ArrheniusIntegral<Real,Trapezoid> : ArrheniusIntegralBase<Real>
+class ArrheniusIntegral<Real,Trapezoid> : public ArrheniusIntegralBase<Real>
 {
   protected:
-    using ArrheniusIntegralBase<Real>::A;
+    // this will keep up from having to use 'this->' to access these.
     using ArrheniusIntegralBase<Real>::Ea;
+    using ArrheniusIntegralBase<Real>::A;
     using ArrheniusIntegralBase<Real>::parallel_threshold;
 
   public:
     ArrheniusIntegral( Real A_, Real Ea_ )
     {
-      setA(A_);
-      setEa(Ea_);
+      this->setA(A_);
+      this->setEa(Ea_);
     }
     ArrheniusIntegral( )
     {}
     virtual ~ArrheniusIntegral () {};
-
-    using ArrheniusIntegralBase<Real>::setA;
-    using ArrheniusIntegralBase<Real>::setEa;
-
 
 
     Real operator()( std::size_t N, Real const *t, Real const *T ) const
@@ -50,7 +50,7 @@ class ArrheniusIntegral<Real,Trapezoid> : ArrheniusIntegralBase<Real>
 #define LOOP \
       for(size_t i = 1; i < N; ++i) \
       { \
-        double exp_now = exp( alpha/T[i] ); \
+        Real exp_now = exp( alpha/T[i] ); \
         if(!have_last) \
         { \
           exp_last = exp_now; \
@@ -73,26 +73,6 @@ class ArrheniusIntegral<Real,Trapezoid> : ArrheniusIntegralBase<Real>
       sum *= 0.5*A;
 #undef LOOP
       return sum;
-
-
-
-
-
-
-
-
-
-      //Real sum = 0;
-      //Real alpha = -Ea/Constants::MKS::R;
-      //Real exp_last = exp( alpha/T[0] );
-      //for(size_t i = 1; i < N; i++)
-      //{
-        //Real exp_now = exp( alpha/T[i]);
-        //sum += (exp_now + exp_last)*(t[i]-t[i-1]);
-        //exp_last = exp_now;
-      //}
-      //sum *= 0.5*A;
-      //return sum;
     }
 
   protected:

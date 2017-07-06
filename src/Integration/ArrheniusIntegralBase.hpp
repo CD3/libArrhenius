@@ -1,11 +1,13 @@
-#ifndef Integrators_ArrheniusIntegralBase_hpp
-#define Integrators_ArrheniusIntegralBase_hpp
+#ifndef Integration_ArrheniusIntegralBase_hpp
+#define Integration_ArrheniusIntegralBase_hpp
 
 /** @file ArrheniusIntegralBase.hpp
   * @brief 
   * @author C.D. Clark III
   * @date 06/27/17
   */
+
+namespace libArrhenius {
 
 /** @class ArrheniusIntegralBase
   * @brief Base class for common Arrhenius integral data.
@@ -34,5 +36,7 @@ class ArrheniusIntegralBase
 
   protected:
 };
+
+}
 
 #endif // include protector

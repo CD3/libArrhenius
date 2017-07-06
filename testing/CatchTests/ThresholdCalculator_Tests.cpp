@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "Constants.hpp"
-#include "Integrators/ArrheniusIntegral.hpp"
+#include "Integration/ArrheniusIntegral.hpp"
 #include "ThresholdCalculator.hpp"
 
 using namespace libArrhenius;

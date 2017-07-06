@@ -46,17 +46,14 @@ set( cxx_needed_features
 
 
 # OPTIONS
-# We only want to setup options if we are in stand-alone mode because
-# the calling script may want to set these, and we shouldn't overwrite them.
-if (STANDALONE_CONFIG)
-  option( BUILD_SWIG_WRAPPERS    "Build interface wrapper libraries for other languages with SWIG" OFF )
-  option( GENERATE_SWIG_WRAPPERS "Generate new SWIG wrappers to build. The
-                                  differentce between this and BUILD_SWIG_WRAPPERS is that the latter
-                                  option will build wrapper libraries from
-                                  existing SWIG generated files. If you want
-                                  to generate new files to build with,
-                                  you should turn both of these options on" OFF )
-endif()
+option( BUILD_SWIG_WRAPPERS    "Build interface wrapper libraries for other languages with SWIG" OFF )
+option( GENERATE_SWIG_WRAPPERS "Generate new SWIG wrappers to build. The
+                                differentce between this and BUILD_SWIG_WRAPPERS is that the latter
+                                option will build wrapper libraries from
+                                existing SWIG generated files. If you want
+                                to generate new files to build with,
+                                you should turn both of these options on" OFF )
+option( USE_OPENMP "Enable/disable OpenMP parallelization, if available." ON)
 
 # only include CPack if we are being configured as a standalone package
 if (STANDALONE_CONFIG)
@@ -138,10 +135,13 @@ find_package( Eigen3 REQUIRED )
 list( APPEND _${PROJECT_NAME}_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR} )
 
 # OpenMP parallelization
+if( USE_OPENMP )
 find_package(OpenMP)
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    list( APPEND _${PROJECT_NAME}_DEFINITIONS "-DUSE_OPENMP" )
+endif()
 endif()
 
 # _           _ _     _ 
