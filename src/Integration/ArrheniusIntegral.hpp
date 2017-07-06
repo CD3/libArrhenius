@@ -14,6 +14,19 @@
 
 namespace libArrhenius {
 
+
+namespace ArrheniusIntegralDetail
+{
+// we need an add function that can be used to reduce user-defined types with
+// openmp
+template<typename Real>
+Real add(Real r, Real n)
+{
+  return r+n;
+}
+}
+
+
 struct Trapezoid {};
 
 /** @class ArrheniusIntegral

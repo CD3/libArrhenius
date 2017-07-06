@@ -67,7 +67,9 @@ class ArrheniusIntegral<Real,Trapezoid> : public ArrheniusIntegralBase<Real>
       }
       else
       {
-        #pragma omp parallel for schedule(static) reduction(+:sum) firstprivate(have_last) private(exp_last)
+        // we have to use a special reduction function here
+        #pragma omp declare reduction( add:Real:omp_out=ArrheniusIntegralDetail::add(omp_out, omp_in) )initializer(omp_priv=0)
+        #pragma omp parallel for schedule(static) reduction(add:sum) firstprivate(have_last) private(exp_last)
         LOOP
       }
       sum *= 0.5*A;
