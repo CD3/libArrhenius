@@ -152,11 +152,13 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       // these are simple flag options, they do not have an argument.
       ("help,h",  "print help message.")
       ("methods,m"  , po::value<std::vector<std::string>>()->composing(), "List of fitting methods to use. Coefficients for each method will be printed.")
-      ("T0", po::value<cpp_dec_float_100>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
+      ("T0", po::value<cpp_dec_float_100>()->default_value(0), "Offset temperature (in K) that will be added to all thermal profiles.")
+      ("T0-uncertainty", po::value<cpp_dec_float_100>(), "Uncertainty in baseline temperature (in K).")
+      ("dT-uncertainty", po::value<cpp_dec_float_100>(), "Uncertainty in temperature rise (in K).")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
-      ("files"  , po::value<std::vector<std::string>>()->composing(), "Thermal profile files to fit. These are ASSUMED to be threshold profiles.")
+      ("files"  , po::value<std::vector<std::string>>()->composing(), "Thermal profile (in K vs. s) files to fit. These are ASSUMED to be threshold profiles.")
       ;
 
     po::options_description all_options("Options");
@@ -179,6 +181,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
 
 
     // read in thermal profiles
+    std::cout << "Loading thermal profiles." << std::endl;
     std::vector<std::shared_ptr<cpp_dec_float_100>> ts,Ts;
     std::vector<size_t> Ns;
     for( auto file : vm["files"].as<std::vector<std::string>>() )
@@ -227,6 +230,11 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
 
       std::cout << "Running " << m << " method." << std::endl;
 
+      typedef libArrhenius::ArrheniusFitBase<cpp_dec_float_100>::Return Coeffs;
+      Coeffs coefficients;
+      Coeffs coefficients_err;
+
+
       // aliases
       if(m == "minimize log(a) variance and scaling factors")
         m = "clark";
@@ -237,12 +245,70 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
         for( int i = 0; i < Ns.size(); ++i )
           fit.addProfile( Ns[i], ts[i].get(), Ts[i].get() );
 
-        auto coefficients = fit.exec();
-        
-        std::cout << "A: " << coefficients.A.get() << std::endl;
-        std::cout << "Ea: " << coefficients.Ea.get() << std::endl;
+        coefficients = fit.exec();
+
+        std::vector< Coeffs > errors;
+
+        if( vm.count("T0-uncertainty") )
+        {
+          fit.clear();
+          // add uncertainty to the thermal profiles and add them to the fitter
+          for( int i = 0; i < Ns.size(); ++i )
+          {
+            std::transform( Ts[i].get(), Ts[i].get()+Ns[i], Ts[i].get(), std::bind2nd(std::plus<cpp_dec_float_100>(), vm["T0-uncertainty"].as<cpp_dec_float_100>()) );
+            fit.addProfile( Ns[i], ts[i].get(), Ts[i].get() );
+          }
+
+          errors.push_back(fit.exec());
+
+          // subtract the uncertainty back off the thermal profiles
+          for( int i = 0; i < Ns.size(); ++i )
+            std::transform( Ts[i].get(), Ts[i].get()+Ns[i], Ts[i].get(), std::bind2nd(std::minus<cpp_dec_float_100>(), vm["T0-uncertainty"].as<cpp_dec_float_100>()) );
+        }
+
+        if( vm.count("dT-uncertainty") )
+        {
+          fit.clear();
+          // add uncertainty to the thermal profiles and add them to the fitter
+          for( int i = 0; i < Ns.size(); ++i )
+          {
+            cpp_dec_float_100 Tmax = *std::max_element( Ts[i].get(), Ts[i].get() + Ns[i] );
+            cpp_dec_float_100 scale = 1 + vm["dT-uncertainty"].as<cpp_dec_float_100>()/(Tmax - Ts[i].get()[0]);
+            for( int j = 0; j < Ns[i]; j++)
+              Ts[i].get()[j] = Ts[i].get()[0] + scale*(Ts[i].get()[j] - Ts[i].get()[0]);
+
+            fit.addProfile( Ns[i], ts[i].get(), Ts[i].get() );
+          }
+
+          errors.push_back(fit.exec());
+
+          // subtract the uncertainty back off the thermal profiles
+          for( int i = 0; i < Ns.size(); ++i )
+          {
+            cpp_dec_float_100 Tmax = *std::max_element( Ts[i].get(), Ts[i].get() + Ns[i] );
+            cpp_dec_float_100 scale = 1 - vm["dT-uncertainty"].as<cpp_dec_float_100>()/(Tmax - Ts[i].get()[0]);
+            for( int j = 0; j < Ns[i]; j++)
+              Ts[i].get()[j] = Ts[i].get()[0] + scale*(Ts[i].get()[j] - Ts[i].get()[0]);
+          }
+
+        }
+
+        coefficients_err.A = 0;
+        coefficients_err.Ea = 0;
+        for( auto e : errors )
+        {
+          auto dA  = e.A.get() - coefficients.A.get();
+          auto dEa = e.Ea.get() - coefficients.Ea.get();
+          coefficients_err.A  = coefficients_err.A.get()  + dA*dA;
+          coefficients_err.Ea = coefficients_err.Ea.get() + dEa*dEa;
+        }
+        coefficients_err.A  = sqrt(coefficients_err.A.get());
+        coefficients_err.Ea = sqrt(coefficients_err.Ea.get());
 
       }
+
+      std::cout << "A: " << coefficients.A.get()   << " +/- " << coefficients_err.A.get() << std::endl;
+      std::cout << "Ea: " << coefficients.Ea.get() << " +/- " << coefficients_err.Ea.get() << std::endl;
 
     }
 
