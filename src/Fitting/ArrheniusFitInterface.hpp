@@ -23,8 +23,8 @@ class ArrheniusFitInterface
     boost::optional<Real> A, Ea;
   };
 
-  virtual void addProfile( size_t N_, Real* t_, Real* T_ );
-  virtual void clear();
+  virtual void addProfile( size_t N_, Real* t_, Real* T_ ) = 0;
+  virtual void clear() = 0;
   virtual Return exec() const = 0;
 
 

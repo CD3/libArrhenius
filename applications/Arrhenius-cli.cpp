@@ -216,8 +216,8 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
 
 
     std::vector<std::pair<std::string,std::string>> supported_methods = {
-      {"Effective Exposure", "Computes an 'effective exposure' for each thermal profile and performs the standard linear regression method on them."}
-     ,{"Minimize log(A) Variance and Scaling Factors","Finds Ea that minimizes variance in A, then find A that minimizes required scaling factor errors."}
+     {"Minimize log(A) Variance and Scaling Factors","Finds Ea that minimizes variance in A, then find A that minimizes required scaling factor errors."}
+     //,{"Effective Exposure", "Computes an 'effective exposure' for each thermal profile and performs the standard linear regression method on them."}
     };
 
     std::vector<std::string> methods;
