@@ -67,6 +67,7 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
       ("help,h",  "print help message.")
       ("Ea", po::value<DataType>()->default_value(6.28e5), "Activation energy.")
       ("A",  po::value<DataType>()->default_value(3.1e99), "Frequency factor.")
+      ("n",  po::value<DataType>()->default_value(0), "Temperature pre-factor exponent for modified Arrhenius equation.")
       ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
       ("Omega", po::value<DataType>()->default_value(1), "Compute threshold corresponding to the value of Omega.")
       ("write-threshold-profiles", "Write the threshold thermal profile to disk.")
@@ -95,9 +96,10 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
     }
 
 
-    libArrhenius::ThresholdCalculator< libArrhenius::ArrheniusIntegral<DataType> > calc;
+    libArrhenius::ThresholdCalculator< libArrhenius::ModifiedArrheniusIntegral<DataType> > calc;
     calc.setA( vm["A"].as<DataType>() );
     calc.setEa( vm["Ea"].as<DataType>() );
+    calc.setExponent( vm["n"].as<DataType>() );
     calc.setThresholdOmega( vm["Omega"].as<DataType>() );
     
     std::cout<< "filename | Omega | threshold" << std::endl;

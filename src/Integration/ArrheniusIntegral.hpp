@@ -10,21 +10,10 @@
 #include <cmath>
 
 #include "Constants.hpp"
-#include "ArrheniusIntegralBase.hpp"
+#include "./ArrheniusIntegralBase.hpp"
+#include "./detail/Utils.hpp"
 
 namespace libArrhenius {
-
-
-namespace ArrheniusIntegralDetail
-{
-// we need an add function that can be used to reduce user-defined types with
-// openmp
-template<typename Real>
-Real add(Real r, Real n)
-{
-  return r+n;
-}
-}
 
 
 struct Trapezoid {};
@@ -40,7 +29,7 @@ class ArrheniusIntegral {};
 
 // include specific implementations here as they
 // won't work if the user tries to include them directly
-#include "./detail/Trapezoid.hpp"
+#include "./detail/ArrheniusIntegral/Trapezoid.hpp"
 
 
 #endif // include protector
