@@ -12,7 +12,7 @@
 namespace libArrhenius {
 
 struct MinimizeLogAVarianceAndScalingFactors {};
-struct EffectiveExposureLinearRegression {};
+struct EffectiveExposuresLinearRegression {};
 struct ConstantTempeLinearRegression {};
 
 /** @class ArrheniusFit
@@ -27,5 +27,6 @@ class ArrheniusFit {};
 // include specific implementations here as they
 // won't work if the user tries to include them directly
 #include "./detail/MinimizeLogAVarianceAndScalingFactors.hpp"
+#include "./detail/EffectiveExposuresLinearRegression.hpp"
 
 #endif // include protector

@@ -130,6 +130,10 @@ set( Boost_LIBS ${Boost_LIBS} ${Boost_LIBRARIES} )
 find_package( Boost )
 list( APPEND _${PROJECT_NAME}_INCLUDE_DIRS ${Boost_INCLUDE_DIRS} )
 
+# The eigen linear algebra library.
+find_package( Eigen3 REQUIRED )
+list( APPEND _${PROJECT_NAME}_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIR} )
+
 # OpenMP parallelization
 if( USE_OPENMP )
 find_package(OpenMP)

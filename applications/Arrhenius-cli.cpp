@@ -161,6 +161,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       // these are simple flag options, they do not have an argument.
       ("help,h",  "print help message.")
       ("methods,m"  , po::value<std::vector<std::string>>()->composing(), "List of fitting methods to use. Coefficients for each method will be printed.")
+      ("list-methods,l",  "print list of available fit methods.")
       ("T0", po::value<HPDataType>()->default_value(0), "Offset temperature (in K) that will be added to all thermal profiles.")
       ("T0-uncertainty", po::value<HPDataType>(), "Uncertainty in baseline temperature (in K).")
       ("dT-uncertainty", po::value<HPDataType>(), "Uncertainty in temperature rise (in K).")
@@ -181,6 +182,22 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
     po::variables_map vm;
     po::store(po::command_line_parser(cmd_args).  options(all_options).positional(args).run(), vm);
     po::notify(vm);
+
+    std::vector<std::pair<std::string,std::string>> supported_methods = {
+     {"Minimize log(A) Variance and Scaling Factors"," - Finds Ea that minimizes variance in log(A), then finds A that minimizes required scaling factor errors."}
+    ,{"Effective Exposures","                          - Computes an 'effective exposure' for each thermal profile and performs the standard linear regression method on them."}
+    };
+
+    if( vm.count("list-methods") )
+    {
+      std::cout << "\n\tMethods:\n" << std::endl;
+      for( auto m : supported_methods )
+      {
+        std::cout << "\t\t" << m.first << m.second << std::endl;
+      }
+      return 0;
+    }
+
 
     if( vm.count("help") || vm.count("files") == 0 )
     {
@@ -215,10 +232,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
 
 
 
-    std::vector<std::pair<std::string,std::string>> supported_methods = {
-     {"Minimize log(A) Variance and Scaling Factors","Finds Ea that minimizes variance in A, then find A that minimizes required scaling factor errors."}
-     //,{"Effective Exposure", "Computes an 'effective exposure' for each thermal profile and performs the standard linear regression method on them."}
-    };
+
 
     std::vector<std::string> methods;
     if( vm.count("methods") )
@@ -250,10 +264,19 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       if(m == "minimize log(a) variance and scaling factors")
         m = "clark";
 
+      if(m == "effective exposures")
+        m = "denton";
+
+      if(m == "effective exposures linear regression")
+        m = "denton";
+
 
       // get the correct fitter
       if(m == "clark")
         fit.reset( new libArrhenius::ArrheniusFit< HPDataType, libArrhenius::MinimizeLogAVarianceAndScalingFactors >());
+
+      if(m == "denton")
+        fit.reset( new libArrhenius::ArrheniusFit< HPDataType, libArrhenius::EffectiveExposuresLinearRegression>());
 
 
       // now fit the profiles
