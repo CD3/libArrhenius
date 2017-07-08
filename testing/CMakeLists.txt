@@ -5,6 +5,7 @@ message( "Configuring unit test build." )
 OPTION( BUILD_UNIT_TESTS "Build unit tests for the library" ON )
 OPTION( BUILD_NONIUS_BENCHMARKS "Build Nonius-based benchmarks." OFF )
 OPTION( BUILD_CELERO_BENCHMARKS "Build Celero-based benchmarks. Note that Nonius and Celero benchmarks cannot be enabled at the same time currently." OFF )
+OPTION( BUILD_GOOGLE_BENCHMARKS "Build Google-based benchmarks." OFF )
 
 if( BUILD_NONIUS_BENCHMARKS AND BUILD_CELERO_BENCHMARKS )
   message(SEND_ERROR "Nonius- and Celero-based benchmarks cannot be built at
@@ -197,5 +198,66 @@ endforeach()
 
 else(EXISTS ${benchmark_DIR})
   message(WARNING "Clero benchmarks were enabled, but the ${benchmark_DIR} directory was not found.")
+endif(EXISTS ${benchmark_DIR})
+endif()
+
+
+
+
+
+#  ____                   _        ____                  _                          _        
+# / ___| ___   ___   __ _| | ___  | __ )  ___ _ __   ___| |__  _ __ ___   __ _ _ __| | _____ 
+#| |  _ / _ \ / _ \ / _` | |/ _ \ |  _ \ / _ \ '_ \ / __| '_ \| '_ ` _ \ / _` | '__| |/ / __|
+#| |_| | (_) | (_) | (_| | |  __/ | |_) |  __/ | | | (__| | | | | | | | | (_| | |  |   <\__ \
+# \____|\___/ \___/ \__, |_|\___| |____/ \___|_| |_|\___|_| |_|_| |_| |_|\__,_|_|  |_|\_\___/
+#                   |___/                                                                    
+
+if(BUILD_GOOGLE_BENCHMARKS)
+
+set( benchmark_DIR ${CMAKE_CURRENT_SOURCE_DIR}/GoogleBenchmarks)
+
+if( EXISTS ${benchmark_DIR} )
+
+set(GOOGLE_BENCH_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/externals/GoogleBench CACHE PATH "")
+set(GOOGLE_BENCH_INCLUDE_DIR ${GOOGLE_BENCH_DIRECTORY}/include CACHE PATH "Google's Benchmark include directory.")
+set(GOOGLE_BENCH_LIBRARY google_bench  CACHE STRING "")
+
+if( NOT EXISTS ${GOOGLE_BENCH_DIRECTORY} )
+  message(SEND_ERROR "GoogleBench directory not found. Please clone https://github.com/google/benchmark into ${GOOGLE_BENCH_DIRECTORY} or disable Google benchmarks." )
+endif()
+
+
+#If google_bench is "out of tree", we have to add the subdirectory differently.
+add_subdirectory(${GOOGLE_BENCH_DIRECTORY} ${CMAKE_CURRENT_BINARY_DIR}/google_bench)
+include_directories(${GOOGLE_BENCH_INCLUDE_DIR})
+
+
+# Benchmarks written with the Google framework are
+# automatically detected. Just put the source files
+# in the `GoogleBenchmarks` directory.
+
+# Search for sources.
+file( GLOB_RECURSE benchmark_SOURCES
+      RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+      "${benchmark_DIR}/*.cpp" )
+    message(STATUS "Detected Google-based Benchmark Sources:")
+foreach(benchmarkSrc ${benchmark_SOURCES})
+  message(STATUS "  ${benchmarkSrc}" )
+endforeach()
+
+# Add benchmark executable
+set( benchmarkName ${PROJECT_NAME}_GoogleBenchmarks )
+add_executable(${benchmarkName} ${benchmark_SOURCES})
+set_target_properties( ${benchmarkName} PROPERTIES CXX_STANDARD 11)
+
+#Link dependencies
+target_link_libraries(${benchmarkName} benchmark ${GOOGLE_BENCH_EXTRA_LIBS} ) # If your project builds a library, link to it here
+
+# Make sure that benchmark binaries are created in the binDir directory
+set_target_properties(${benchmarkName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY  ${binDir} )
+
+
+else(EXISTS ${benchmark_DIR})
+  message(WARNING "Google benchmarks were enabled, but the ${benchmark_DIR} directory was not found.")
 endif(EXISTS ${benchmark_DIR})
 endif()
