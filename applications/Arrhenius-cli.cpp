@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <regex>
 #include <boost/program_options.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 using namespace boost::multiprecision;
@@ -22,7 +23,8 @@ namespace std {
 }
 
 std::vector<std::pair<std::string,std::string>> cmds = { {"help","Print usage and exit."}
-                                                       , {"calc","Perform various calculations on thermal profile data"}
+                                                       , {"calc-threshold","Calculate the threshold scaling factor for a thermal profile(s)."}
+                                                       , {"calc-rate","Calculate the damage rate for a thermal profile(s)"}
                                                        , {"fit","Fit Arrhenius coefficients to a set of thermal profile data."}
                                                        };
 
@@ -51,15 +53,47 @@ void print_manual()
 }
 
 
+std::string generate_output_filename( std::string input_filename, std::string transform_string )
+{
+  string ofn;
+
+  if( transform_string.find("re:") == 0 )
+  {
+    auto tokens = RUC::Tokenize( transform_string, ":" );
+    std::regex re(tokens[1]);
+    ofn = std::regex_replace(input_filename,re,tokens[2]); 
+  }
+  else if( transform_string.find("fmt:") == 0 )
+  {
+    auto tokens = RUC::Tokenize( transform_string, ":" );
+    std::regex re("\\{ifn\\}");
+    ofn = std::regex_replace( tokens[1], re, input_filename );
+  }
+  else
+  {
+    ofn = transform_string;
+  }
 
 
-void calc_help(std::string prog, std::string cmd, po::options_description& opts)
+  if( ofn == input_filename )
+    throw std::runtime_error("ERROR: output filename "+ofn+" is same as input filename.");
+
+  if( ofn == "" )
+    throw std::runtime_error("ERROR: output filename is empty.");
+
+
+  return ofn;
+}
+
+
+
+void calc_threshold_help(std::string prog, std::string cmd, po::options_description& opts)
 {
   std::cout << "Usage: " << prog << " [global options] "<< cmd << " ["<< cmd <<" options]\n" << std::endl;
   std::cout << opts << std::endl;
   std::cout << std::endl;
 }
-int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_args )
+int calc_threshold_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_args )
 {
     po::options_description opt_options("Options");
     opt_options.add_options()
@@ -71,6 +105,7 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
       ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
       ("Omega", po::value<DataType>()->default_value(1), "Compute threshold corresponding to the value of Omega.")
       ("write-threshold-profiles", "Write the threshold thermal profile to disk.")
+      ("output-filename,o", po::value<std::string>()->default_value("fmt:{ifn}.threshold"), "Output filename.")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -84,14 +119,14 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
     po::positional_options_description args;
     args.add("files"  , -1);
     
-    // now actually oparse them
+    // now actually parse them
     po::variables_map vm;
     po::store(po::command_line_parser(cmd_args).  options(all_options).positional(args).run(), vm);
     po::notify(vm);
 
     if( vm.count("help") || vm.count("files") == 0 )
     {
-      calc_help(prog,cmd,opt_options);
+      calc_threshold_help(prog,cmd,opt_options);
       return 0;
     }
 
@@ -125,7 +160,7 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
         for(size_t i = 0; i < n; ++i)
           TT[i] = Threshold*(T[i] - T[0]) + T[0];
 
-        std::string ofn = file+".threshold";
+        std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
         std::ofstream out( ofn );
         for(size_t i = 0; i < n; i++)
           out << t[i] << " " << TT[i] << "\n";
@@ -149,13 +184,97 @@ int calc_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_a
 
 }
 
+void calc_rate_help(std::string prog, std::string cmd, po::options_description& opts)
+{
+  std::cout << "Usage: " << prog << " [global options] "<< cmd << " ["<< cmd <<" options]\n" << std::endl;
+  std::cout << opts << std::endl;
+  std::cout << std::endl;
+}
+int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_args )
+{
+    po::options_description opt_options("Options");
+    opt_options.add_options()
+      // these are simple flag options, they do not have an argument.
+      ("help,h",  "print help message.")
+      ("Ea", po::value<DataType>()->default_value(6.28e5), "Activation energy.")
+      ("A",  po::value<DataType>()->default_value(3.1e99), "Frequency factor.")
+      ("n",  po::value<DataType>()->default_value(0), "Temperature pre-factor exponent for modified Arrhenius equation.")
+      ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
+      ("log", "Calculate the log of the rate instead.")
+      ("output-filename,o", po::value<std::string>()->default_value("fmt:{ifn}.rate"), "Output filename.")
+      ("write-threshold-profiles", "Write the threshold thermal profile to disk.")
+      ;
+    po::options_description arg_options("Arguments");
+    arg_options.add_options()
+      ("files"  , po::value<std::vector<std::string>>()->composing(), "Thermal profile files to analyze.") // an option that can be given multiple times with each argument getting stored in a vector.
+      ;
+
+    po::options_description all_options("Options");
+    all_options.add(opt_options).add(arg_options);
+
+    // tell boost how to translate positional options to named options
+    po::positional_options_description args;
+    args.add("files"  , -1);
+    
+    // now actually oparse them
+    po::variables_map vm;
+    po::store(po::command_line_parser(cmd_args).  options(all_options).positional(args).run(), vm);
+    po::notify(vm);
+
+    if( vm.count("help") || vm.count("files") == 0 )
+    {
+      calc_rate_help(prog,cmd,opt_options);
+      return 0;
+    }
+
+
+    for( auto file : vm["files"].as<std::vector<std::string>>() )
+    {
+      int n;
+      DataType *t, *T;
+
+      std::ifstream in(file.c_str());
+      RUC::ReadFunction(in, t, T, n);
+      in.close();
+      // add offset temp
+      std::transform( T, T+n, T, std::bind2nd(std::plus<DataType>(), vm["T0"].as<DataType>()) );
+
+      // just reuse temperature array for rate
+      for(int i = 0; i < n; i++)
+      {
+        if( vm.count("log") )
+          T[i] = log(vm["A"].as<DataType>()) + -vm["Ea"].as<DataType>() / (libArrhenius::Constants::MKS::R * T[i] );
+        else
+          T[i] = vm["A"].as<DataType>() * exp( -vm["Ea"].as<DataType>() / (libArrhenius::Constants::MKS::R * T[i] ) );
+      }
+
+      std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
+      std::ofstream out( ofn );
+      for(size_t i = 0; i < n; i++)
+        out << t[i] << " " << T[i] << "\n";
+      out.close();
+
+
+      delete[] t;
+      delete[] T;
+    }
+    
+    return 0;
+
+
+
+
+
+
+
+}
+
 void fit_help(std::string prog, std::string cmd, po::options_description& opts)
 {
   std::cout << "Usage: " << prog << " [global options] "<< cmd << " ["<< cmd <<" options]\n" << std::endl;
   std::cout << opts << std::endl;
   std::cout << std::endl;
 }
-
 int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_args )
 {
     po::options_description opt_options("Options");
@@ -203,7 +322,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
 
     if( vm.count("help") || vm.count("files") == 0 )
     {
-      calc_help(prog,cmd,opt_options);
+      calc_threshold_help(prog,cmd,opt_options);
       return 0;
     }
 
@@ -360,7 +479,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       calc_args.push_back( "--Omega=1");
       for( auto file : vm["files"].as<std::vector<std::string>>() )
         calc_args.push_back( file );
-      calc_cmd( prog, "calc", calc_args );
+      calc_threshold_cmd( "", "", calc_args );
 
     }
 
@@ -483,8 +602,11 @@ int main(int argc, const char** argv)
       return 0;
     }
 
-    if( vm["command"].as<std::string>() == "calc" )
-      return calc_cmd( argv[0], "calc", cmd_args );
+    if( vm["command"].as<std::string>() == "calc-threshold" )
+      return calc_threshold_cmd( argv[0], "calc-threshold", cmd_args );
+
+    if( vm["command"].as<std::string>() == "calc-rate" )
+      return calc_rate_cmd( argv[0], "calc-rate", cmd_args );
 
     if( vm["command"].as<std::string>() == "fit" )
       return fit_cmd( argv[0], "fit", cmd_args );

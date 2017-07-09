@@ -4,4 +4,5 @@
 #include "Integration/ArrheniusIntegral.hpp"
 #include "Integration/ModifiedArrheniusIntegral.hpp"
 #include "Fitting/ArrheniusFit.hpp"
+#include "Constants.hpp"
 
