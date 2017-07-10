@@ -6,6 +6,7 @@
   * @author C.D. Clark III
   * @date 06/27/17
   */
+#include "Constants.hpp"
 
 namespace libArrhenius {
 
@@ -33,6 +34,9 @@ class ArrheniusIntegralBase
     void setParallelThreshold( size_t t ) { parallel_threshold = t; }
     size_t getParallelThreshold( ) const { return parallel_threshold; }
 
+    Real getCriticalTemperature() const { return Ea / Constants::MKS::R / log(A); }
+
+    Real rate( Real T ) const { return A*exp( -Ea / Constants::MKS::R /T ); }
 
   protected:
 };

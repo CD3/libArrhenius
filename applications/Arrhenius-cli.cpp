@@ -25,6 +25,7 @@ namespace std {
 std::vector<std::pair<std::string,std::string>> cmds = { {"help","Print usage and exit."}
                                                        , {"calc-threshold","Calculate the threshold scaling factor for a thermal profile(s)."}
                                                        , {"calc-rate","Calculate the damage rate for a thermal profile(s)"}
+                                                       , {"calc-damage","Calculate the damage parameter for a thermal profile(s)"}
                                                        , {"fit","Fit Arrhenius coefficients to a set of thermal profile data."}
                                                        };
 
@@ -39,7 +40,6 @@ void print_usage(std::string prog, po::options_description& opts)
   }
   std::cout << std::endl;
 }
-
 void print_manual()
 {
   // we are using a raw string literal here (the R"()" syntax, which is a C++11 feature.
@@ -202,7 +202,7 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
       ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
       ("log", "Calculate the log of the rate instead.")
       ("output-filename,o", po::value<std::string>()->default_value("fmt:{ifn}.rate"), "Output filename.")
-      ("write-threshold-profiles", "Write the threshold thermal profile to disk.")
+      ("write-rate-profiles", "Write the threshold thermal profile to disk.")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -216,7 +216,7 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
     po::positional_options_description args;
     args.add("files"  , -1);
     
-    // now actually oparse them
+    // now actually parse them
     po::variables_map vm;
     po::store(po::command_line_parser(cmd_args).  options(all_options).positional(args).run(), vm);
     po::notify(vm);
@@ -226,6 +226,11 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
       calc_rate_help(prog,cmd,opt_options);
       return 0;
     }
+
+    libArrhenius::ModifiedArrheniusIntegral<DataType> integrate;
+    integrate.setA( vm["A"].as<DataType>() );
+    integrate.setEa( vm["Ea"].as<DataType>() );
+    integrate.setExponent( vm["n"].as<DataType>() );
 
 
     for( auto file : vm["files"].as<std::vector<std::string>>() )
@@ -243,16 +248,40 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
       for(int i = 0; i < n; i++)
       {
         if( vm.count("log") )
-          T[i] = log(vm["A"].as<DataType>()) + -vm["Ea"].as<DataType>() / (libArrhenius::Constants::MKS::R * T[i] );
+          T[i] = log(integrate.rate(T[i]));
         else
-          T[i] = vm["A"].as<DataType>() * exp( -vm["Ea"].as<DataType>() / (libArrhenius::Constants::MKS::R * T[i] ) );
+          T[i] = integrate.rate(T[i]);
       }
 
-      std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
-      std::ofstream out( ofn );
-      for(size_t i = 0; i < n; i++)
-        out << t[i] << " " << T[i] << "\n";
-      out.close();
+      std::cout << "file: " << file << std::endl;
+      // min rate
+      std::cout << "min rate: " << *std::min_element(T, T+n) << std::endl;
+      // max rate
+      std::cout << "max rate: " << *std::max_element(T, T+n) << std::endl;
+      // avg rate
+      std::cout << "avg rate: " << std::accumulate(T, T+n, DataType(0))/n << std::endl;
+      // critical temperature
+      DataType Tcrit = integrate.getCriticalTemperature();
+      std::cout << "T crit: " <<  Tcrit << std::endl;
+      // time above critical temp
+      DataType taucrit = 0;
+      for(int i = 1; i < n; i++)
+      {
+        if( (T[i] + T[i-1])/2 > 1 )
+          taucrit += t[i] - t[i-1];
+      }
+      std::cout << "tau crit: " <<  taucrit<< std::endl;
+
+      std::cout << std::endl;
+
+      if( vm.count("write-rate-profiles") )
+      {
+        std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
+        std::ofstream out( ofn );
+        for(size_t i = 0; i < n; i++)
+          out << t[i] << " " << T[i] << "\n";
+        out.close();
+      }
 
 
       delete[] t;
@@ -471,15 +500,30 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       std::cout << "A: " << coefficients.A.get()   << " +/- " << coefficients_err.A.get() << std::endl;
       std::cout << "Ea: " << coefficients.Ea.get() << " +/- " << coefficients_err.Ea.get() << std::endl;
 
-      std::vector<std::string> calc_args;
+      std::cout<< "filename | Omega | threshold" << std::endl;
 
-      calc_args.push_back( "--A="+ std::to_string( coefficients.A.get() ) );
-      calc_args.push_back( "--Ea="+std::to_string( coefficients.Ea.get()) );
-      calc_args.push_back( "--T0="+std::to_string( vm["T0"].as<HPDataType>()) );
-      calc_args.push_back( "--Omega=1");
-      for( auto file : vm["files"].as<std::vector<std::string>>() )
-        calc_args.push_back( file );
-      calc_threshold_cmd( "", "", calc_args );
+      // todo: should we add support for modified arrhenius?
+      libArrhenius::ThresholdCalculator< libArrhenius::ArrheniusIntegral<DataType> > calc;
+      calc.setA( coefficients.A.get() );
+      calc.setEa( coefficients.Ea.get() );
+      //calc.setExponent( vm["n"].as<DataType>() );
+      // what about support for omega != 1?
+      //calc.setThresholdOmega( vm["Omega"].as<DataType>() );
+      std::vector<HPDataType> Thresholds(Ns.size());
+      for( int i = 0; i < vm["files"].as<std::vector<std::string>>().size(); i++ )
+      {
+        auto file = vm["files"].as<std::vector<std::string>>()[i];
+        auto Omega = calc.Omega(Ns[i],ts[i].get(),Ts[i].get());
+        auto Threshold = calc(Ns[i],ts[i].get(),Ts[i].get());
+        std::cout << file << " | " << Omega << " | " << Threshold << std::endl;
+        Thresholds[i] = Threshold;
+      }
+      // calc sum of residuals
+      auto ThresholdMean = std::accumulate(Thresholds.begin(), Thresholds.end(), HPDataType(0))/Thresholds.size();
+      auto ThresholdDevs = std::accumulate(Thresholds.begin(), Thresholds.end(), HPDataType(0), [&]( HPDataType a, HPDataType b ){ return a + (b-ThresholdMean)*(b-ThresholdMean); } );
+      std::cout << "R^2: " << ThresholdDevs << std::endl;
+
+      std::cout << std::endl;
 
     }
 
