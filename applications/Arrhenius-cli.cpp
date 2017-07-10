@@ -104,7 +104,7 @@ int calc_threshold_cmd( std::string prog, std::string cmd, std::vector<std::stri
       ("n",  po::value<DataType>()->default_value(0), "Temperature pre-factor exponent for modified Arrhenius equation.")
       ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
       ("Omega", po::value<DataType>()->default_value(1), "Compute threshold corresponding to the value of Omega.")
-      ("write-threshold-profiles", "Write the threshold thermal profile to disk.")
+      ("write-threshold-profiles,w", "Write the threshold thermal profile to disk.")
       ("output-filename,o", po::value<std::string>()->default_value("fmt:{ifn}.threshold"), "Output filename.")
       ;
     po::options_description arg_options("Arguments");
@@ -188,6 +188,9 @@ void calc_rate_help(std::string prog, std::string cmd, po::options_description& 
 {
   std::cout << "Usage: " << prog << " [global options] "<< cmd << " ["<< cmd <<" options]\n" << std::endl;
   std::cout << opts << std::endl;
+  std::cout << "Use this command to calculate some statistics on the damage rate for a set of thermal profiles." << std::endl;
+  std::cout << "For example, this command will print the minimum, maximum, and average damage rates." << std::endl;
+  std::cout << "If the --write-rate-profiles option is given, the damage rate at each point in the thermal profile will be written to file." << std::endl;
   std::cout << std::endl;
 }
 int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_args )
@@ -202,7 +205,7 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
       ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
       ("log", "Calculate the log of the rate instead.")
       ("output-filename,o", po::value<std::string>()->default_value("fmt:{ifn}.rate"), "Output filename.")
-      ("write-rate-profiles", "Write the threshold thermal profile to disk.")
+      ("write-rate-profiles,w", "Write the rate profile to disk.")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -280,6 +283,97 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
         std::ofstream out( ofn );
         for(size_t i = 0; i < n; i++)
           out << t[i] << " " << T[i] << "\n";
+        out.close();
+      }
+
+
+      delete[] t;
+      delete[] T;
+    }
+    
+    return 0;
+
+
+
+
+
+
+
+}
+
+void calc_damage_help(std::string prog, std::string cmd, po::options_description& opts)
+{
+  std::cout << "Usage: " << prog << " [global options] "<< cmd << " ["<< cmd <<" options]\n" << std::endl;
+  std::cout << opts << std::endl;
+  std::cout << "Use this command to evaluate the Arrhenius integral for on a set of thermal profiles." << std::endl;
+  std::cout << "If the --write-damage-profiles option is given, the damage accumulation for each time point in the profile," << std::endl;
+  std::cout << "i.e. Omega(t), will be written to a file." << std::endl;
+  std::cout << std::endl;
+}
+int calc_damage_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_args )
+{
+    po::options_description opt_options("Options");
+    opt_options.add_options()
+      // these are simple flag options, they do not have an argument.
+      ("help,h",  "print help message.")
+      ("Ea", po::value<DataType>()->default_value(6.28e5), "Activation energy.")
+      ("A",  po::value<DataType>()->default_value(3.1e99), "Frequency factor.")
+      ("n",  po::value<DataType>()->default_value(0), "Temperature pre-factor exponent for modified Arrhenius equation.")
+      ("T0", po::value<DataType>()->default_value(0), "Offset temperature that will be added to all thermal profiles.")
+      ("output-filename,o", po::value<std::string>()->default_value("fmt:{ifn}.damage"), "Output filename.")
+      ("write-damage-profiles,w", "Write the damage profiles to disk.")
+      ;
+    po::options_description arg_options("Arguments");
+    arg_options.add_options()
+      ("files"  , po::value<std::vector<std::string>>()->composing(), "Thermal profile files to analyze.") // an option that can be given multiple times with each argument getting stored in a vector.
+      ;
+
+    po::options_description all_options("Options");
+    all_options.add(opt_options).add(arg_options);
+
+    // tell boost how to translate positional options to named options
+    po::positional_options_description args;
+    args.add("files"  , -1);
+    
+    // now actually parse them
+    po::variables_map vm;
+    po::store(po::command_line_parser(cmd_args).  options(all_options).positional(args).run(), vm);
+    po::notify(vm);
+
+    if( vm.count("help") || vm.count("files") == 0 )
+    {
+      calc_damage_help(prog,cmd,opt_options);
+      return 0;
+    }
+
+    libArrhenius::ModifiedArrheniusIntegral<DataType> integrate;
+    integrate.setA( vm["A"].as<DataType>() );
+    integrate.setEa( vm["Ea"].as<DataType>() );
+    integrate.setExponent( vm["n"].as<DataType>() );
+
+
+    std::cout<< "filename | Omega" << std::endl;
+    for( auto file : vm["files"].as<std::vector<std::string>>() )
+    {
+      int n;
+      DataType *t, *T;
+
+      std::ifstream in(file.c_str());
+      RUC::ReadFunction(in, t, T, n);
+      in.close();
+      // add offset temp
+      std::transform( T, T+n, T, std::bind2nd(std::plus<DataType>(), vm["T0"].as<DataType>()) );
+
+      auto Omega = integrate(n,t,T);
+      std::cout << file << " | " << Omega << std::endl;
+
+      if( vm.count("write-damage-profiles") )
+      {
+        std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
+        std::ofstream out( ofn );
+        // this is NOT efficient
+        for(size_t i = 0; i < n; i++)
+          out << t[i] << " " << integrate(i,t,T) << "\n";
         out.close();
       }
 
@@ -651,6 +745,9 @@ int main(int argc, const char** argv)
 
     if( vm["command"].as<std::string>() == "calc-rate" )
       return calc_rate_cmd( argv[0], "calc-rate", cmd_args );
+
+    if( vm["command"].as<std::string>() == "calc-damage" )
+      return calc_damage_cmd( argv[0], "calc-damage", cmd_args );
 
     if( vm["command"].as<std::string>() == "fit" )
       return fit_cmd( argv[0], "fit", cmd_args );
