@@ -11,8 +11,15 @@
 #include <eigen3/Eigen/Dense>
 using namespace Eigen;
 
-namespace libArrhenius {
+namespace RUC {
 
+/*
+ * @breif Perform least-squared linear regression on a set of x-y data points.
+ *
+ * @param x vector containing x coordinates of point to fit.
+ * @param y vector containing y coordinates of point to fit.
+ * @return A 2x1 matrix containing the y-intercept (element 0) and slope (element 1) of the fit.
+ */
 template<typename T>
 Matrix<T,2,1> LinearRegression( const Matrix<T,Dynamic,1> &x, const Matrix<T,Dynamic,1> &y )
 {

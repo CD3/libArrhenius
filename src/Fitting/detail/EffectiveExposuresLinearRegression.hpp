@@ -82,7 +82,7 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
           integrator.setA(1);
           logAs[j] = -log( integrator(N[i], t[i], T[i]) );
         }
-        auto linreg = LinearRegression(Eas,logAs);
+        auto linreg = RUC::LinearRegression(Eas,logAs);
         // linreg[0] is 'b',
         // linreg[1] is 'm' for the fit
         logteff[i] = -linreg[0];
@@ -90,7 +90,7 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
       }
 
       // now perform linear regression with effective parameters
-      auto linreg = LinearRegression( invTeff, logteff );
+      auto linreg = RUC::LinearRegression( invTeff, logteff );
 
       ret.A = exp(-linreg[0]);
       ret.Ea = linreg[1]*Constants::MKS::R;

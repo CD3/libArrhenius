@@ -14,7 +14,7 @@ TEST_CASE( "Linear Regression Function", "[utils]" ) {
   x << 1, 2, 3, 4, 5;
   y << 3, 5, 7, 9, 11;
 
-  auto beta = libArrhenius::LinearRegression(x,y);
+  auto beta = RUC::LinearRegression(x,y);
   CHECK( beta(0) == Approx(1) );
   CHECK( beta(1) == Approx(2) );
 
@@ -24,7 +24,7 @@ TEST_CASE( "Linear Regression Function", "[utils]" ) {
   y << 8, 6, 4, 2, 0;
 
 
-  beta = libArrhenius::LinearRegression(x,y);
+  beta = RUC::LinearRegression(x,y);
   CHECK( beta(0) == Approx(10) );
   CHECK( beta(1) == Approx(-2) );
 

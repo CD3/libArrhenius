@@ -1,12 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <regex>
 #include <boost/program_options.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 using namespace boost::multiprecision;
 
 #include "Arrhenius.hpp"
+#include "Utils/GenerateOutputFilename.hpp"
 
 namespace po = boost::program_options;
 using namespace std;
@@ -53,37 +53,6 @@ void print_manual()
 }
 
 
-std::string generate_output_filename( std::string input_filename, std::string transform_string )
-{
-  string ofn;
-
-  if( transform_string.find("re:") == 0 )
-  {
-    auto tokens = RUC::Tokenize( transform_string, ":" );
-    std::regex re(tokens[1]);
-    ofn = std::regex_replace(input_filename,re,tokens[2]); 
-  }
-  else if( transform_string.find("fmt:") == 0 )
-  {
-    auto tokens = RUC::Tokenize( transform_string, ":" );
-    std::regex re("\\{ifn\\}");
-    ofn = std::regex_replace( tokens[1], re, input_filename );
-  }
-  else
-  {
-    ofn = transform_string;
-  }
-
-
-  if( ofn == input_filename )
-    throw std::runtime_error("ERROR: output filename "+ofn+" is same as input filename.");
-
-  if( ofn == "" )
-    throw std::runtime_error("ERROR: output filename is empty.");
-
-
-  return ofn;
-}
 
 
 
@@ -160,7 +129,7 @@ int calc_threshold_cmd( std::string prog, std::string cmd, std::vector<std::stri
         for(size_t i = 0; i < n; ++i)
           TT[i] = Threshold*(T[i] - T[0]) + T[0];
 
-        std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
+        std::string ofn = RUC::GenerateOutputFilename(file,vm["output-filename"].as<std::string>());
         std::ofstream out( ofn );
         for(size_t i = 0; i < n; i++)
           out << t[i] << " " << TT[i] << "\n";
@@ -279,7 +248,7 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
 
       if( vm.count("write-rate-profiles") )
       {
-        std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
+        std::string ofn = RUC::GenerateOutputFilename(file,vm["output-filename"].as<std::string>());
         std::ofstream out( ofn );
         for(size_t i = 0; i < n; i++)
           out << t[i] << " " << T[i] << "\n";
@@ -369,7 +338,7 @@ int calc_damage_cmd( std::string prog, std::string cmd, std::vector<std::string>
 
       if( vm.count("write-damage-profiles") )
       {
-        std::string ofn = generate_output_filename(file,vm["output-filename"].as<std::string>());
+        std::string ofn = RUC::GenerateOutputFilename(file,vm["output-filename"].as<std::string>());
         std::ofstream out( ofn );
         // this is NOT efficient
         for(size_t i = 0; i < n; i++)
