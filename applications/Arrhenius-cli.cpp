@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <numeric>
 #include <boost/program_options.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 using namespace boost::multiprecision;
