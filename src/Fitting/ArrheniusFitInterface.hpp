@@ -27,6 +27,9 @@ class ArrheniusFitInterface
   virtual void clear() = 0;
   virtual Return exec() const = 0;
 
+  virtual void setMinEa( Real minEa_ ) = 0;
+  virtual void setMaxEa( Real maxEa_ ) = 0;
+
 
   protected:
 };

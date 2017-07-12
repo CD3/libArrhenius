@@ -385,6 +385,8 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       ("T0", po::value<HPDataType>()->default_value(0), "Offset temperature (in K) that will be added to all thermal profiles.")
       ("T0-uncertainty", po::value<HPDataType>(), "Uncertainty in baseline temperature (in K).")
       ("dT-uncertainty", po::value<HPDataType>(), "Uncertainty in temperature rise (in K).")
+      ("Ea-min", po::value<HPDataType>(), "Minimum bound on Ea for methods that perform a search.")
+      ("Ea-max", po::value<HPDataType>(), "Maximum bound on Ea for methods that perform a search.")
       ;
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -498,10 +500,14 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       if(m == "denton")
         fit.reset( new libArrhenius::ArrheniusFit< HPDataType, libArrhenius::EffectiveExposuresLinearRegression>());
 
-
       // now fit the profiles
       for( int i = 0; i < Ns.size(); ++i )
         fit->addProfile( Ns[i], ts[i].get(), Ts[i].get() );
+
+      if(vm.count("Ea-min"))
+        fit->setMinEa( vm["Ea-min"].as<HPDataType>() );
+      if(vm.count("Ea-max"))
+        fit->setMaxEa( vm["Ea-max"].as<HPDataType>() );
 
       coefficients = fit->exec();
 

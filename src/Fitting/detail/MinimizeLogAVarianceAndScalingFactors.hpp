@@ -128,18 +128,31 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
 
         // Now do a quick scan for the minimum.
         // We'll calculate the cost at every half decade for Ea.
-        BOOST_LOG_TRIVIAL(trace) << "Scanning for minimum (rough estimate) between " << 1 << " and " << Ea_ub;
+        BOOST_LOG_TRIVIAL(trace) << "Scanning for minimum (rough estimate)";
+
         
+        
+        while( Ea_cost(Ea_ub) == 0 )
+          Ea_ub /= 2;
+
         // scan Ea from 1 to Ea_ub on a log-scale
-        int min_e = 0;
-        int max_e = log10(Ea_ub);
-        float de = 0.5;
-        int Ne = 1+(max_e-min_e)/de;
+        Real min_lnEa, max_lnEa, d_lnEa;
+        min_lnEa = 0;
+        max_lnEa = log(Ea_ub);
+        // check if we have limits configured. if so,
+        // we should use them if they are more restrictive.
+        if( this->minEa && log(this->minEa.get()) > min_lnEa )
+          min_lnEa = log(this->minEa.get());
+        if( this->maxEa && log(this->maxEa.get()) < max_lnEa )
+          max_lnEa = log(this->maxEa.get());
+        // discretize
+        int num  = (max_lnEa - min_lnEa) / 0.5; // half log spacing
+        d_lnEa = (max_lnEa - min_lnEa) / (num - 1);
         int i_of_min = 0;
-        Real min_cost = Ea_cost(1);
-        for(int i = 0; i < Ne; ++i)
+        Real min_cost = Ea_cost(exp(min_lnEa));
+        for(int i = 1; i < num; ++i)
         {
-          Ea_ub = pow(static_cast<Real>(10),min_e + i*de);
+          Ea_ub = exp(min_lnEa + i*d_lnEa);
           Real cost = Ea_cost(Ea_ub);
           if( cost < min_cost )
           {
@@ -147,8 +160,8 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
             min_cost = cost;
           }
         }
-        Ea_lb = pow(10,min_e + (i_of_min-1)*de);
-        Ea_ub = pow(10,min_e + (i_of_min+1)*de);
+        Ea_lb = exp(min_lnEa + (i_of_min-1)*d_lnEa);
+        Ea_ub = exp(min_lnEa + (i_of_min+1)*d_lnEa);
         BOOST_LOG_TRIVIAL(trace) << "Minimum between " << Ea_lb << " and " << Ea_ub;
       }
 
