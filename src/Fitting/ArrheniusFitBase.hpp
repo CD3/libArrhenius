@@ -7,6 +7,7 @@
   * @date 06/28/17
   */
 #include<boost/optional.hpp>
+#include<boost/log/trivial.hpp>
 #include"ArrheniusFitInterface.hpp"
 
 namespace libArrhenius {

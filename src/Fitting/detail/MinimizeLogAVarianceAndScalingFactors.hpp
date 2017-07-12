@@ -40,6 +40,7 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
     Return
     exec() const
     {
+      BOOST_LOG_TRIVIAL(trace) << "MinimizeLogAVarianceAndScalignFactors: Executing Fit";
       // find Ea that minimizes the variance in corresponding A values.
       // then find A that minimizes scaling factor error
 
@@ -77,7 +78,6 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
         for(size_t i = 0; i < N.size(); ++i)
           devs += (logAs[i] - mean)*(logAs[i] - mean);
 
-
        return devs;
       };
 
@@ -86,6 +86,7 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
       Real Ea_lb = 0;
       Real Ea_ub = 0;
 
+      BOOST_LOG_TRIVIAL(trace) << "Searching for upper bound on Ea";
       int prec = std::numeric_limits<Real>::digits - 3;
       boost::uintmax_t maxit;
 
@@ -96,38 +97,63 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
         // evaluate the integral at larger Ea's before reaching zero.
         // So, we know Ea can't be larger than the smallest value that
         // gives zero for the integral. This gives us an initial upper bound on Ea.
+        bool found_one = false;
         for( int i = 0; i < N.size(); i++ )
         {
           eps_tolerance<Real> tol( prec );
           maxit = 100;
           Real guess = 1e2; // a place to start
           Real factor = 2;  // multiplication factor to use when searching for upper bound
+          try {
           auto Ea_ub_range = bracket_and_solve_root( [&](Real Ea){
               integrator.setEa(Ea);
               integrator.setA(1);
               return integrator(N[i],t[i],T[i]);}, guess, factor, false, tol, maxit );
-          // use the smallest Ea for the upper bound.
-          if( i == 0 || Ea_ub_range.first < Ea_ub )
-            Ea_ub = Ea_ub_range.first;
+
+              // use the smallest Ea for the upper bound.
+              if( !found_one || Ea_ub_range.first < Ea_ub )
+                Ea_ub = Ea_ub_range.first;
+              found_one = true;
+          } catch( ... ) {
+            BOOST_LOG_TRIVIAL(warning) <<"WARNING: Could not determine an upper bound on Ea from thermal profile number " << i << ". Skipping";
+          }
         }
+        if( !found_one )
+        {
+          BOOST_LOG_TRIVIAL(fatal)<<"ERROR: Could not determine an upper-bound on Ea from any of the thermal profiles.";
+          throw std::runtime_error( "ERROR: Could not determine an upper-bound on Ea from any of the thermal profiles.");
+        }
+
+        
 
         // Now do a quick scan for the minimum.
         // We'll calculate the cost at every half decade for Ea.
-        int exponent = log10(Ea_ub);
-        Real last_cost;
-        for(Real e = 0; e < exponent; e += 0.5)
+        BOOST_LOG_TRIVIAL(trace) << "Scanning for minimum (rough estimate) between " << 1 << " and " << Ea_ub;
+        
+        // scan Ea from 1 to Ea_ub on a log-scale
+        int min_e = 0;
+        int max_e = log10(Ea_ub);
+        float de = 0.5;
+        int Ne = 1+(max_e-min_e)/de;
+        int i_of_min = 0;
+        Real min_cost = Ea_cost(1);
+        for(int i = 0; i < Ne; ++i)
         {
-          Ea_ub = pow(10,e);
+          Ea_ub = pow(static_cast<Real>(10),min_e + i*de);
           Real cost = Ea_cost(Ea_ub);
-          if( e == 0 || cost < last_cost )
-            Ea_lb = Ea_ub;
-          if( e > 0 && cost > last_cost)
-            break;
-          last_cost = cost;
+          if( cost < min_cost )
+          {
+            i_of_min = i;
+            min_cost = cost;
+          }
         }
+        Ea_lb = pow(10,min_e + (i_of_min-1)*de);
+        Ea_ub = pow(10,min_e + (i_of_min+1)*de);
+        BOOST_LOG_TRIVIAL(trace) << "Minimum between " << Ea_lb << " and " << Ea_ub;
       }
 
       maxit = 1000;
+      BOOST_LOG_TRIVIAL(trace) << "Searching for Ea with Cost minimization";
       auto Ea_min = brent_find_minima( Ea_cost, Ea_lb, Ea_ub, prec );
       ret.Ea = Ea_min.first;
 
@@ -162,6 +188,7 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
 
 
       maxit = 1000;
+      BOOST_LOG_TRIVIAL(trace) << "Searching for A with Cost minimization";
       auto A_min = brent_find_minima( A_cost, A_lb, A_ub, prec );
       ret.A = A_min.first;
 

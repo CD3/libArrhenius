@@ -2,6 +2,12 @@
 #include <fstream>
 #include <algorithm>
 #include <numeric>
+
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+namespace logging = boost::log;
+
 #include <boost/program_options.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 using namespace boost::multiprecision;
@@ -583,9 +589,7 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
         Thresholds[i] = Threshold;
       }
       // calc sum of residuals
-      auto ThresholdMean = std::accumulate(Thresholds.begin(), Thresholds.end(), HPDataType(0))/Thresholds.size();
-      auto ThresholdDevs = std::accumulate(Thresholds.begin(), Thresholds.end(), HPDataType(0), [&]( HPDataType a, HPDataType b ){ return a + (b-ThresholdMean)*(b-ThresholdMean); } );
-      std::cout << "R^2: " << ThresholdDevs << std::endl;
+      std::cout << "R^2: " << std::accumulate(Thresholds.begin(), Thresholds.end(), HPDataType(0), []( HPDataType a, HPDataType b ){ return HPDataType(a + (b-1)*(b-1)); } ) << std::endl;
 
       std::cout << std::endl;
 
@@ -652,9 +656,9 @@ int main(int argc, const char** argv)
       ("help,h",  "print help message.")
       ("version", "print library version.")
       ("manual",  "print manual.")
-      ("verbose,v", po::value<int>()->implicit_value(0), "verbose level.") // an option that takes an argument, but has a default value.
+      ("verbose,v", po::value<int>()->default_value(0), "verbose level.") // an option that takes an argument, but has a default value.
       ;
-
+      
     // now define our arguments.
     po::options_description arg_options("Arguments");
     arg_options.add_options()
@@ -709,6 +713,19 @@ int main(int argc, const char** argv)
       std::cout << "libArrhenius "<<libArrhenius_VERSION_FULL << std::endl;
       return 0;
     }
+
+    logging::core::get()->set_filter( logging::trivial::severity >= logging::trivial::error );
+    if( vm["verbose"].as<int>() > 0 )
+      logging::core::get()->set_filter( logging::trivial::severity >= logging::trivial::warning );
+    if( vm["verbose"].as<int>() > 1 )
+      logging::core::get()->set_filter( logging::trivial::severity >= logging::trivial::info );
+    if( vm["verbose"].as<int>() > 2 )
+      logging::core::get()->set_filter( logging::trivial::severity >= logging::trivial::debug );
+    if( vm["verbose"].as<int>() > 3 )
+      logging::core::get()->set_filter( logging::trivial::severity >= logging::trivial::trace );
+
+
+
 
     if( vm["command"].as<std::string>() == "calc-threshold" )
       return calc_threshold_cmd( argv[0], "calc-threshold", cmd_args );

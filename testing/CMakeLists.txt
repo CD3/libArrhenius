@@ -47,6 +47,7 @@ endforeach()
 # Add unit test executable
 set( testName ${PROJECT_NAME}_CatchTests )
 add_executable(${testName} ${unitTest_SOURCES})
+target_link_libraries( ${testName} ${Boost_LIBS} )
 set_target_properties( ${testName} PROPERTIES CXX_STANDARD 11)
 
 #Link dependencies
@@ -125,6 +126,7 @@ foreach(benchmarkSrc ${benchmark_SOURCES})
 
   # Add benchmark executable
   add_executable(${benchmarkName} ${benchmarkSrc})
+  target_link_libraries( ${testName} ${Boost_LIBS} )
 
   # Link dependencies
   target_link_libraries(${benchmarkName} Threads::Threads ) # If your project builds a library, link to it here
@@ -187,6 +189,7 @@ get_filename_component(benchmarkName ${benchmarkSrc} NAME_WE)
 
 # Add benchmark executable
 add_executable(${benchmarkName} ${benchmarkSrc})
+target_link_libraries( ${testName} ${Boost_LIBS} )
 
 # Link dependencies
 target_link_libraries(${benchmarkName} celero ${CELERO_EXTRA_LIBS} ) # If your project builds a library, link to it here
