@@ -54,7 +54,13 @@ Matrix<T,2,1> LinearRegression( const Matrix<T,Dynamic,1> &x, const Matrix<T,Dyn
   // need the transpose of X
   auto Xtrans = X.transpose();
 
-  return (Xtrans*X).inverse()*Xtrans*y;
+  auto fit = (Xtrans*X).inverse()*Xtrans*y;
+
+  Matrix<T,2,1> ret;
+  ret[0] = fit[0];
+  ret[1] = fit[1];
+
+  return ret;
 }
 
 }

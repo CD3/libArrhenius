@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <numeric>
 
+#include <boost/filesystem.hpp>
+
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
@@ -119,6 +121,8 @@ int calc_threshold_cmd( std::string prog, std::string cmd, std::vector<std::stri
       int n;
       DataType *t, *T;
 
+      if( !boost::filesystem::exists(file) )
+        throw std::runtime_error("ERROR: '"+file+"' does not exist.");
       std::ifstream in(file.c_str());
       RUC::ReadFunction(in, t, T, n);
       in.close();
@@ -217,6 +221,8 @@ int calc_rate_cmd( std::string prog, std::string cmd, std::vector<std::string> &
       int n;
       DataType *t, *T;
 
+      if( !boost::filesystem::exists(file) )
+        throw std::runtime_error("ERROR: '"+file+"' does not exist.");
       std::ifstream in(file.c_str());
       RUC::ReadFunction(in, t, T, n);
       in.close();
@@ -334,6 +340,8 @@ int calc_damage_cmd( std::string prog, std::string cmd, std::vector<std::string>
       int n;
       DataType *t, *T;
 
+      if( !boost::filesystem::exists(file) )
+        throw std::runtime_error("ERROR: '"+file+"' does not exist.");
       std::ifstream in(file.c_str());
       RUC::ReadFunction(in, t, T, n);
       in.close();
@@ -437,6 +445,8 @@ int fit_cmd( std::string prog, std::string cmd, std::vector<std::string> &cmd_ar
       int n;
       HPDataType *t, *T;
 
+      if( !boost::filesystem::exists(file) )
+        throw std::runtime_error("ERROR: '"+file+"' does not exist.");
       std::ifstream in(file.c_str());
       RUC::ReadFunction(in, t, T, n);
       in.close();

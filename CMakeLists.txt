@@ -130,6 +130,11 @@ find_package( Boost COMPONENTS log REQUIRED)
 list( APPEND _${PROJECT_NAME}_INCLUDE_DIRS ${Boost_INCLUDE_DIRS} )
 set( Boost_LIBS ${Boost_LIBS} ${Boost_LIBRARIES} )
 
+# The boost filesystem library
+find_package( Boost COMPONENTS filesystem )
+list( APPEND _${PROJECT_NAME}_INCLUDE_DIRS ${Boost_INCLUDE_DIRS} )
+set( Boost_LIBS ${Boost_LIBS} ${Boost_LIBRARIES} )
+
 # The boost header libraries
 #find_package( Boost REQUIRED ) # if boost is a required dependency, use this
 find_package( Boost )
@@ -213,7 +218,7 @@ string( REGEX REPLACE "^lib" "" LIB_NAME ${PROJECT_NAME} )
 
 # Build applications
 
-if( Boost_PROGRAM_OPTIONS_FOUND )
+if( Boost_PROGRAM_OPTIONS_FOUND AND Boost_FILESYSTEM_FOUND )
   add_executable( ${LIB_NAME}-cli applications/${LIB_NAME}-cli.cpp )
   #target_link_libraries( ${LIB_NAME}-cli ${LIB_NAME} ${Boost_PROGRAM_OPTIONS_LIBRARY} )
   message("LINK: ${Boost_LIBS}")
