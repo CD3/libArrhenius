@@ -8,7 +8,7 @@
   * @date 07/07/17
   */
 
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Dense>
 using namespace Eigen;
 
 namespace RUC {
