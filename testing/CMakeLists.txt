@@ -1,5 +1,4 @@
-cmake_minimum_required( VERSION 3.1 )
-
+cmake_minimum_required( VERSION 3.10 ) 
 message( "Configuring unit test build." )
 
 OPTION( BUILD_UNIT_TESTS "Build unit tests for the library" ON )
@@ -22,7 +21,6 @@ endif()
 
 
 include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/include" )
-include_directories( "${PROJECT_SOURCE_DIR}/src" )
 
 if(BUILD_UNIT_TESTS)
 
@@ -43,27 +41,16 @@ foreach(testSrc ${unitTest_SOURCES})
   message(STATUS "  ${testSrc}" )
 endforeach()
 
-
-# Add unit test executable
 set( testName ${PROJECT_NAME}_CatchTests )
 add_executable(${testName} ${unitTest_SOURCES})
-target_link_libraries( ${testName} ${Boost_LIBS} )
-set_target_properties( ${testName} PROPERTIES CXX_STANDARD 11)
-
-#Link dependencies
-#target_link_libraries(${testName} <TARGET> ) # If your project builds a library, link to it here
-
-# Make sure that testing binaries are created in the binDir directory
+target_link_libraries( ${testName} libArrhenius::Arrhenius )
 set_target_properties(${testName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY  ${binDir} )
 
-# Now add the unit test binary to the CMake test target
-#Notice the WORKING_DIRECTORY and COMMAND
 add_test(NAME ${testName} 
          WORKING_DIRECTORY ${buildDir}
          COMMAND ${binDir}/${testName} )
 
 
-# Copy the data directory to the build directory
 file(COPY data DESTINATION ${buildDir} )
 
 endif()
@@ -77,70 +64,6 @@ endif()
 
 
 set( binDir ${CMAKE_BINARY_DIR}/benchmarkBin )
-
-# _   _             _             ____                  _                          _        
-#| \ | | ___  _ __ (_)_   _ ___  | __ )  ___ _ __   ___| |__  _ __ ___   __ _ _ __| | _____ 
-#|  \| |/ _ \| '_ \| | | | / __| |  _ \ / _ \ '_ \ / __| '_ \| '_ ` _ \ / _` | '__| |/ / __|
-#| |\  | (_) | | | | | |_| \__ \ | |_) |  __/ | | | (__| | | | | | | | | (_| | |  |   <\__ \
-#|_| \_|\___/|_| |_|_|\__,_|___/ |____/ \___|_| |_|\___|_| |_|_| |_| |_|\__,_|_|  |_|\_\___/
-                                                                                           
-
-
-# Benchmarks written with the Nonius framework are
-# automatically detected. Just put the source files
-# in the `NoniusBenchmarks` directory.
-
-if(BUILD_NONIUS_BENCHMARKS)
-
-set( benchmark_DIR ${CMAKE_CURRENT_SOURCE_DIR}/NoniusBenchmarks)
-
-if( EXISTS ${benchmark_DIR} )
-
-set(NONIUS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/nonius CACHE PATH "")
-
-if( NOT EXISTS ${NONIUS_DIRECTORY} )
-  message(SEND_ERROR "Nonius directory not found. Please put the Nonius header directory at ${NONIUS_DIRECTORY} or disable Nonius benchmarks." )
-endif()
-
-# Search for sources.
-file( GLOB_RECURSE benchmark_SOURCES
-      RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-      "${benchmark_DIR}/*.cpp" )
-    message(STATUS "Detected Nonius-based Benchmark Sources:")
-foreach(benchmarkSrc ${benchmark_SOURCES})
-  message(STATUS "  ${benchmarkSrc}" )
-endforeach()
-
-# Nonius requires a threading library
-find_package(Threads)
-
-if( NOT Threads_FOUND )
-  message(SEND_ERROR "Nonius requires a threading library, which was not found. Either install a Threads library, or disable Nonius benchmarks." )
-endif()
-
-if(Threads_FOUND)
-
-foreach(benchmarkSrc ${benchmark_SOURCES})
-
-  get_filename_component(benchmarkName ${benchmarkSrc} NAME_WE)
-
-  # Add benchmark executable
-  add_executable(${benchmarkName} ${benchmarkSrc})
-  target_link_libraries( ${testName} ${Boost_LIBS} )
-
-  # Link dependencies
-  target_link_libraries(${benchmarkName} Threads::Threads ) # If your project builds a library, link to it here
-
-  # Make sure that testing binaries are created in the binDir directory and use C++11
-  set_target_properties(${benchmarkName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${binDir} CXX_STANDARD 11)
-
-endforeach()
-endif(Threads_FOUND)
-
-else(EXISTS ${benchmark_DIR})
-  message(WARNING "Nonius benchmarks were enabled, but the ${benchmark_DIR} directory was not found.")
-endif(EXISTS ${benchmark_DIR})
-endif()
 
 
 #  ____     _                  ____                  _                          _        
@@ -189,13 +112,10 @@ get_filename_component(benchmarkName ${benchmarkSrc} NAME_WE)
 
 # Add benchmark executable
 add_executable(${benchmarkName} ${benchmarkSrc})
-target_link_libraries( ${testName} ${Boost_LIBS} )
+rarget_link_libraries( ${benchmarkName} libArrhenius::Arrhenius )
 
 # Link dependencies
 target_link_libraries(${benchmarkName} celero ${CELERO_EXTRA_LIBS} ) # If your project builds a library, link to it here
-
-# Make sure that testing binaries are created in the binDir directory and use C++11
-set_target_properties(${benchmarkName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${binDir} CXX_STANDARD 11)
 
 endforeach()
 
@@ -208,59 +128,3 @@ endif()
 
 
 
-#  ____                   _        ____                  _                          _        
-# / ___| ___   ___   __ _| | ___  | __ )  ___ _ __   ___| |__  _ __ ___   __ _ _ __| | _____ 
-#| |  _ / _ \ / _ \ / _` | |/ _ \ |  _ \ / _ \ '_ \ / __| '_ \| '_ ` _ \ / _` | '__| |/ / __|
-#| |_| | (_) | (_) | (_| | |  __/ | |_) |  __/ | | | (__| | | | | | | | | (_| | |  |   <\__ \
-# \____|\___/ \___/ \__, |_|\___| |____/ \___|_| |_|\___|_| |_|_| |_| |_|\__,_|_|  |_|\_\___/
-#                   |___/                                                                    
-
-if(BUILD_GOOGLE_BENCHMARKS)
-
-set( benchmark_DIR ${CMAKE_CURRENT_SOURCE_DIR}/GoogleBenchmarks)
-
-if( EXISTS ${benchmark_DIR} )
-
-set(GOOGLE_BENCH_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/externals/GoogleBench CACHE PATH "")
-set(GOOGLE_BENCH_INCLUDE_DIR ${GOOGLE_BENCH_DIRECTORY}/include CACHE PATH "Google's Benchmark include directory.")
-set(GOOGLE_BENCH_LIBRARY google_bench  CACHE STRING "")
-
-if( NOT EXISTS ${GOOGLE_BENCH_DIRECTORY} )
-  message(SEND_ERROR "GoogleBench directory not found. Please clone https://github.com/google/benchmark into ${GOOGLE_BENCH_DIRECTORY} or disable Google benchmarks." )
-endif()
-
-
-#If google_bench is "out of tree", we have to add the subdirectory differently.
-add_subdirectory(${GOOGLE_BENCH_DIRECTORY} ${CMAKE_CURRENT_BINARY_DIR}/google_bench)
-include_directories(${GOOGLE_BENCH_INCLUDE_DIR})
-
-
-# Benchmarks written with the Google framework are
-# automatically detected. Just put the source files
-# in the `GoogleBenchmarks` directory.
-
-# Search for sources.
-file( GLOB_RECURSE benchmark_SOURCES
-      RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-      "${benchmark_DIR}/*.cpp" )
-    message(STATUS "Detected Google-based Benchmark Sources:")
-foreach(benchmarkSrc ${benchmark_SOURCES})
-  message(STATUS "  ${benchmarkSrc}" )
-endforeach()
-
-# Add benchmark executable
-set( benchmarkName ${PROJECT_NAME}_GoogleBenchmarks )
-add_executable(${benchmarkName} ${benchmark_SOURCES})
-set_target_properties( ${benchmarkName} PROPERTIES CXX_STANDARD 11)
-
-#Link dependencies
-target_link_libraries(${benchmarkName} benchmark ${GOOGLE_BENCH_EXTRA_LIBS} ) # If your project builds a library, link to it here
-
-# Make sure that benchmark binaries are created in the binDir directory
-set_target_properties(${benchmarkName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY  ${binDir} )
-
-
-else(EXISTS ${benchmark_DIR})
-  message(WARNING "Google benchmarks were enabled, but the ${benchmark_DIR} directory was not found.")
-endif(EXISTS ${benchmark_DIR})
-endif()
