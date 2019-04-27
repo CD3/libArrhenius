@@ -19,9 +19,9 @@ message(STATUS "${PROJECT_NAME} version: ${${PROJECT_NAME}_VERSION_FULL}")
 
 # need to run configure_file twice
 configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/src/version.h.in"
-                "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}_version.h")
-configure_file( "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}_version.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}_version.h")
+                "${CMAKE_CURRENT_BINARY_DIR}/include/version.h")
+configure_file( "${CMAKE_CURRENT_BINARY_DIR}/include/version.h"
+                "${CMAKE_CURRENT_BINARY_DIR}/include/version.h")
 
 
 set( Boost_USE_STATIC_LIBS ON)
@@ -40,7 +40,6 @@ target_compile_features( ${LIB_NAME} INTERFACE cxx_std_11 )
 target_sources(
   ${LIB_NAME}
   INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/version.h>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Arrhenius.hpp>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Constants.hpp>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ThresholdCalculator.hpp>
