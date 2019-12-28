@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "Integration/ArrheniusIntegral.hpp"
-#include "Fitting/ArrheniusFit.hpp"
-#include "ThresholdCalculator.hpp"
+#include <libArrhenius/Integration/ArrheniusIntegral.hpp>
+#include <libArrhenius/Fitting/ArrheniusFit.hpp>
+#include <libArrhenius/ThresholdCalculator.hpp>
 
 #include<boost/optional/optional_io.hpp>
 

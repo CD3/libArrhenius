@@ -2,10 +2,10 @@
 #include "fakeit.hpp"
 
 #include <vector>
-#include "Constants.hpp"
-#include "Integration/ArrheniusIntegral.hpp"
-#include "Integration/ModifiedArrheniusIntegral.hpp"
-#include "ThresholdCalculator.hpp"
+#include <libArrhenius/Constants.hpp>
+#include <libArrhenius/Integration/ArrheniusIntegral.hpp>
+#include <libArrhenius/Integration/ModifiedArrheniusIntegral.hpp>
+#include <libArrhenius/ThresholdCalculator.hpp>
 
 using namespace libArrhenius;
 using namespace libArrhenius::Constants;

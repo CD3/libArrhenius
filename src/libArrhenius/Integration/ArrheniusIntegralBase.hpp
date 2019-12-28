@@ -6,7 +6,7 @@
   * @author C.D. Clark III
   * @date 06/27/17
   */
-#include "Constants.hpp"
+#include "../Constants.hpp"
 
 namespace libArrhenius {
 

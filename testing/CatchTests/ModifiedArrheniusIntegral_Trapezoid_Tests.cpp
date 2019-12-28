@@ -2,7 +2,7 @@
 #include "fakeit.hpp"
 
 #include <vector>
-#include "Integration/ModifiedArrheniusIntegral.hpp"
+#include <libArrhenius/Integration/ModifiedArrheniusIntegral.hpp>
 
 using namespace libArrhenius;
 using namespace libArrhenius::Constants;

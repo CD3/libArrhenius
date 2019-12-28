@@ -9,7 +9,7 @@
 
 #include <cmath>
 
-#include "Constants.hpp"
+#include "../Constants.hpp"
 #include "./ArrheniusIntegralBase.hpp"
 #include "./detail/Utils.hpp"
 

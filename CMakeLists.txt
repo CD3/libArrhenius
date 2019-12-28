@@ -17,7 +17,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mo
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(libArrhenius)
-include(macro-git_version)
+include(function-git_version)
 GIT_VERSION(${PROJECT_NAME})
 message(STATUS "${PROJECT_NAME} version: ${${PROJECT_NAME}_VERSION_FULL}")
 
@@ -42,28 +42,28 @@ target_include_directories( ${LIB_NAME} INTERFACE
 )
 target_compile_features( ${LIB_NAME} INTERFACE cxx_std_11 )
 target_sources(
-  ${LIB_NAME}
+${LIB_NAME}
   INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Arrhenius.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Constants.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/ThresholdCalculator.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Integration/ArrheniusIntegral.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Integration/ModifiedArrheniusIntegral.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Integration/ArrheniusIntegralBase.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Integration/ModifiedArrheniusIntegralBase.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Integration/detail/Utils.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Integration/detail/ArrheniusIntegral/Trapezoid.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Integration/detail/ModifiedArrheniusIntegral/Trapezoid.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Fitting/ArrheniusFit.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Fitting/ArrheniusFitBase.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Fitting/ArrheniusFitInterface.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Fitting/detail/MinimizeLogAVarianceAndScalingFactors.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Fitting/detail/ConstantTemperatureLinearRegression.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Fitting/detail/EffectiveExposuresLinearRegression.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Utils/Tokenizer.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Utils/ReadFunction.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Utils/LinearRegression.hpp>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/Utils/GenerateOutputFilename.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/ThresholdCalculator.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Arrhenius.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Constants.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Utils/ReadFunction.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Utils/Tokenizer.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Utils/GenerateOutputFilename.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Utils/LinearRegression.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Integration/ArrheniusIntegralBase.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Integration/ModifiedArrheniusIntegralBase.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Integration/ArrheniusIntegral.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Integration/ModifiedArrheniusIntegral.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Integration/detail/Utils.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Integration/detail/ArrheniusIntegral/Trapezoid.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Integration/detail/ModifiedArrheniusIntegral/Trapezoid.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Fitting/ArrheniusFitInterface.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Fitting/ArrheniusFit.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Fitting/ArrheniusFitBase.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Fitting/detail/ConstantTemperatureLinearRegression.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Fitting/detail/EffectiveExposuresLinearRegression.hpp>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/libArrhenius/Fitting/detail/MinimizeLogAVarianceAndScalingFactors.hpp>
 )
 
 target_link_libraries(${LIB_NAME}

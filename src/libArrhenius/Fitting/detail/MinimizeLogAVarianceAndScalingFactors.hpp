@@ -17,7 +17,7 @@ using boost::math::tools::brent_find_minima;
 using boost::math::tools::bracket_and_solve_root;
 using boost::math::tools::eps_tolerance;
 
-#include "ThresholdCalculator.hpp"
+#include "../../ThresholdCalculator.hpp"
 
 
 namespace libArrhenius {

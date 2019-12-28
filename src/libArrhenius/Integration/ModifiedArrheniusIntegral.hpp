@@ -9,9 +9,9 @@
 
 #include <cmath>
 
-#include "Constants.hpp"
-#include "ModifiedArrheniusIntegralBase.hpp"
-#include "ArrheniusIntegral.hpp"
+#include "../Constants.hpp"
+#include "./ModifiedArrheniusIntegralBase.hpp"
+#include "./ArrheniusIntegral.hpp"
 
 namespace libArrhenius {
 

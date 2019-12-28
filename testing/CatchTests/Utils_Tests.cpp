@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "fakeit.hpp"
 
-#include "Utils/LinearRegression.hpp"
+#include <libArrhenius/Utils/LinearRegression.hpp>
 
 TEST_CASE( "Linear Regression Function", "[utils]" ) {
 

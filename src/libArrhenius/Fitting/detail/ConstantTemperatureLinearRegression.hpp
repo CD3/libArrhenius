@@ -8,7 +8,7 @@
   */
 
 #include <Eigen/Dense>
-#include "Utils/LinearRegression.hpp"
+#include "../../Utils/LinearRegression.hpp"
 
 namespace libArrhenius {
 
