@@ -51,7 +51,7 @@ add_test(NAME ${testName}
          COMMAND ${binDir}/${testName} )
 
 
-file(COPY data DESTINATION ${buildDir} )
+#file(COPY data DESTINATION ${buildDir} )
 
 endif()
 
