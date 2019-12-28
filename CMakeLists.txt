@@ -73,7 +73,7 @@ target_link_libraries(${LIB_NAME}
     Eigen3::Eigen
     )
 
-if( STANDALONE )
+if( BUILD_TESTS AND STANDALONE )
 add_subdirectory( testing )
 endif()
 
