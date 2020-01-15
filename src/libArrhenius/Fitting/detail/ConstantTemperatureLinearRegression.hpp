@@ -38,7 +38,7 @@ class ArrheniusFit<Real,ConstantTemperatureLinearRegression> : public ArrheniusF
       // construct effective exposure parameters for each profile
       BOOST_LOG_TRIVIAL(trace) << "Determining peak temperature and exposure durations.";
       Eigen::Matrix<Real,Eigen::Dynamic,1> logteff(N.size()),invTeff(N.size());
-      for(int i = 0; i < N.size(); i++)
+      for(size_t i = 0; i < N.size(); i++)
       {
         Real Tmax = *std::max_element( T[i], T[i]+N[i] );
         Real Tmin = *std::min_element( T[i], T[i]+N[i] );
@@ -46,7 +46,7 @@ class ArrheniusFit<Real,ConstantTemperatureLinearRegression> : public ArrheniusF
 
         // get the time above 50% temp rise
         logteff[i] = 0;
-        for(int j = 1; j < N[i]; j++)
+        for(size_t j = 1; j < N[i]; j++)
         {
           if( (T[i][j] + T[i][j-1])/2 > (Tmax+Tmin)/2 )
             logteff[i] += t[i][j] - t[i][j-1];

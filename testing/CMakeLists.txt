@@ -43,6 +43,11 @@ endforeach()
 
 set( testName ${PROJECT_NAME}_CatchTests )
 add_executable(${testName} ${unitTest_SOURCES})
+if(MSVC)
+  target_compile_options(${testName} PRIVATE /W4 /WX)
+else()
+  target_compile_options(${testName} PRIVATE -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -pedantic -Werror)
+endif()
 target_link_libraries( ${testName} libArrhenius::Arrhenius )
 set_target_properties(${testName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY  ${binDir} )
 

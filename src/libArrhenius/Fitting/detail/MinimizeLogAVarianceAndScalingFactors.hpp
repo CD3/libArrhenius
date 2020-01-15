@@ -98,7 +98,7 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
         // So, we know Ea can't be larger than the smallest value that
         // gives zero for the integral. This gives us an initial upper bound on Ea.
         bool found_one = false;
-        for( int i = 0; i < N.size(); i++ )
+        for( size_t i = 0; i < N.size(); i++ )
         {
           eps_tolerance<Real> tol( prec );
           maxit = 100;

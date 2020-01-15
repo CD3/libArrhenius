@@ -47,7 +47,7 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
       // evaluate the integral at larger Ea's before reaching zero.
       // So, we know Ea can't be larger than the smallest value that
       // gives zero for the integral. This gives us an initial upper bound on Ea.
-      for( int i = 0; i < N.size(); i++ )
+      for( size_t i = 0; i < N.size(); i++ )
       {
         int prec = std::numeric_limits<Real>::digits - 3;
         eps_tolerance<Real> tol( prec );
@@ -65,7 +65,7 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
 
 
       // compute a set of (Ea,log(A)) pairs
-      for(int i = 0; i < N.size(); i++)
+      for(size_t i = 0; i < N.size(); i++)
       {
 
         // We'll calculate (Ea,log(A)) pairs for every half decade

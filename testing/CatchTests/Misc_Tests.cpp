@@ -28,7 +28,7 @@ TEST_CASE( "Eigen-based Linear Regression", "[experiment]" ) {
 
   // solve Xtrans X B = Xtrans Y
   auto beta1 = (Xtrans*X).inverse()*Y;
-  auto beta2 = (Xtrans*X).ldlt().solve(Y);
+  //auto beta2 = (Xtrans*X).ldlt().solve(Y);
 
   CHECK( beta1(0) == Approx(1) );
   CHECK( beta1(1) == Approx(2) );
@@ -53,7 +53,7 @@ TEST_CASE( "Eigen-based Linear Regression", "[experiment]" ) {
 
   // solve Xtrans X B = Xtrans Y
   auto beta1 = (Xtrans*X).inverse()*Y;
-  auto beta2 = (Xtrans*X).ldlt().solve(Y);
+  //auto beta2 = (Xtrans*X).ldlt().solve(Y);
 
   CHECK( beta1(0) == Approx(10) );
   CHECK( beta1(1) == Approx(-2) );
