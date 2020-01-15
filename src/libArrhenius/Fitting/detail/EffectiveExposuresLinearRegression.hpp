@@ -70,9 +70,9 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
 
         // We'll calculate (Ea,log(A)) pairs for every half decade
         int emin = 0;
-        int emax = log10(Ea_ub);
+        int emax = static_cast<int>(log10(Ea_ub));
         Real de = 0.1;
-        int num = 1+(emax - emin) / de;
+        int num = 1+static_cast<int>((emax - emin) / de);
 
         Eigen::Matrix<Real,Eigen::Dynamic,1> Eas(num),logAs(num);
         for(int j = 0; j < num; ++j)

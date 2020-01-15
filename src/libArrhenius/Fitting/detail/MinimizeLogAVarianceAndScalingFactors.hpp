@@ -146,7 +146,7 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
         if( this->maxEa && log(this->maxEa.get()) < max_lnEa )
           max_lnEa = log(this->maxEa.get());
         // discretize
-        int num  = (max_lnEa - min_lnEa) / 0.5; // half log spacing
+        int num  = static_cast<int>((max_lnEa - min_lnEa) / 0.5); // half log spacing
         d_lnEa = (max_lnEa - min_lnEa) / (num - 1);
         int i_of_min = 0;
         Real min_cost = Ea_cost(exp(min_lnEa));
