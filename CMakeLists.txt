@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.10 )
+cmake_minimum_required( VERSION 3.14 )
 
 if( TARGET libArrhenius )
   return()
@@ -110,6 +110,7 @@ include(CMakePackageConfigHelpers)
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
   VERSION ${${PROJECT_NAME}_VERSION}
   COMPATIBILITY SameMajorVersion
+  ARCH_INDEPENDENT
   )
 install(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
