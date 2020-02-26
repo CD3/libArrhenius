@@ -26,10 +26,12 @@ Integral model for thermal damage requires the evaluation of the integral\cite{W
   \Omega\qty(\tau) = \int\limits_{0}^{\tau} A e^{\frac{-Ea}{RT\qty(t)}} dt.
 \end{equation}
 If the temperature, $T\qty(t)$, is predicted using a numerical simulation, i.e. a finite-difference or finite-element model, then the temperature is calculated at a discrete set of times, $(t_0, t_1,
-\ldots)$. This limits the methods that can be used to evaluate Eq. \ref{eqn:arr} numerically to those that work on predefined nodes (Gaussian quadrature, for example, cannot be used) numerically to
-those that work on predefined nodes (Gaussian quadrature, for example, cannot be used).
+\ldots)$. This limits the methods that can be used to evaluate Eq. \ref{eqn:arr} numerically to those that work on predefined nodes (Gaussian quadrature, for example, cannot be used).
 
-\ldots
+The usual methods for numerically evaluating an integral with pre-defined nodes would be Reimann sum, Trapezoid Rule,
+and Simpson's Rule. These methods are simple to implement, but approximate the integrand as piece-wise, linear, and
+parabolic, respectivly.
+
 
 
 \section{Recasting the integral}
