@@ -1,4 +1,3 @@
-% arara: clean
 % arara: pdflatex
 % arara: bibtex
 % arara: pdflatex
@@ -80,7 +79,17 @@ This gives the accumulated damage over a time $t_1 - t_0$, when the temperature 
 temperature rise is not linear, then we can discretize the profile into small segments, such that
 the temperature is approximatly linear over the segment. It is reasonalble to think that this approximation
 (treating the temperature as linear over some time interval) is better than assuming that the damage rate
-is linear over the same time.
+is linear over the same time. Figure \ref{fig:arrhenius_rate} shows the Arrhenius rate as a function of time for an example
+thermal profile. The figure shows that the Arrhenius rate is concave on both sides its peak, which means that the error accumlated by the
+trapezoid rule will have the same sign on each side. The trapezoid rule will \emph{over}-predict the accumulated damage. On the otherhand,
+if the thermal profile is approimated as linear segments, the accumulated damage will be \emph{under}-predicted while the temperature increases, and
+then be \emph{over}-predicted when the temperature begins to fall.
+
+
+\begin{figure}
+\includegraphics{./arrhenius_rate.png}
+\caption{\label{fig:arrhenius_rate} The Arrhenius rate, $Ae^{-E_a/RT(t)}$, plotted for an example thermal profile. }
+\end{figure}
 
 
 \bibliography{references_database}
