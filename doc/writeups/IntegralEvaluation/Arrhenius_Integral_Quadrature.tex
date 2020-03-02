@@ -73,17 +73,48 @@ Comparing this to Eq. \ref{eqn:arr_2}, it is simple to show that
 \end{align}
 Finally, we note that the slope, $m$, can be determined from $T_0$ and $T_1$ if $t_1$ and $t_0$ are known (rise over run),
 \begin{align}
+  \label{eq:quadrature}
   \Omega &= A \frac{t_1 - t_0}{T_1 - T_0}              \left[T_1 E_2\qty{E_a/RT_1}              - T_0 E_2\qty{E_a/RT_0}             \right]
 \end{align}
 This gives the accumulated damage over a time $t_1 - t_0$, when the temperature rise is linear. If the actual
 temperature rise is not linear, then we can discretize the profile into small segments, such that
-the temperature is approximatly linear over the segment. It is reasonalble to think that this approximation
+the temperature is approximatly linear over the segment.
+
+It is reasonalble to think that this approximation
 (treating the temperature as linear over some time interval) is better than assuming that the damage rate
 is linear over the same time. Figure \ref{fig:arrhenius_rate} shows the Arrhenius rate as a function of time for an example
 thermal profile. The figure shows that the Arrhenius rate is concave on both sides its peak, which means that the error accumlated by the
 trapezoid rule will have the same sign on each side. The trapezoid rule will \emph{over}-predict the accumulated damage. On the otherhand,
 if the thermal profile is approimated as linear segments, the accumulated damage will be \emph{under}-predicted while the temperature increases, and
 then be \emph{over}-predicted when the temperature begins to fall.
+
+\section{Numerical Implementation}
+
+Equation \ref{eq:quadrature} provides an analytic expession to evaluate the Arrhenius integral over some time period where the temperature rise is linear. To numerically integrate
+the Arrhenius integral for a full thermal profile, we simply break the integral up into small time intervals, use Equation \ref{eq:quadrature} to evaluate the integral over each
+time inteval, and then them all up. However, we must be careful because the there is a $T_1 - T_0$ in the denominator. If the temperature is constant, we will divide by zero.
+
+If $T_0 = T_1 = T$, then Equation \ref{eq:quadrature} gives
+\begin{align}
+  \Omega = A(t_1 - t_0)\qty( \frac{ T E_2\qty{E_a/RT} - T E_2\qty{E_a/RT} } { T - T} ) = A(t_1 - t_0) \frac{0}{0}.
+\end{align}
+To evaluate, we need to apply L'H\^{o}pital's rule for $T_1 - T_0 \rightarrow 0$. Apparently, this limit will give $A(t_1 - t_0) e^{-E_a/RT}$, since this is the integral for a constant temperature.
+
+A numerical implementation will need to check for the case that $T_0 = T_1$ and use the constant temperature quadrature. If $T_0$ and $T_1$ are stored as floating point numbers, then
+we will probably need to check that they are ``close'', rather than ``equal''. Note that, for a linear temperature rise from $T_0$ and $T_1$, evaluating Equation \ref{eq:quadrature} will
+to give a numerical value between $Ae^{-E_a/RT_0}(t_1 - t_0)$ and $Ae^{-E_a/RT_1}(t_1 - t_0)$. We can therefore write a limit on the maximum error in incurred by any numerical approximation to integral over duration $t_1 - t_0$.
+\begin{align}
+  \epsilon \le \frac{\abs{ Ae^{-E_a/RT_1}(t_1 - t_0) - Ae^{-E_a/RT_0}(t_1 - t_0)} }{Ae^{-E_a/RT_0}(t_1 - t_0)} = \abs{e^{-\frac{E_a}{R} \qty(\frac{1}{T_1} - \frac{1}{T_0})} - 1}
+\end{align}
+This gives a metric for deciding if $T_1$ and $T_0$ are ``close enough''. Given a tolerance, or maximum allowed error, we 
+\begin{align}
+  \frac{R}{E_a} \ln \qty( \epsilon + 1 ) \le \abs{ \frac{1}{T_1} - \frac{1}{T_0} }
+\end{align}
+For small $\epsilon$, $\ln \qty(\epsilon + 1) \approx \epsilon$,
+\begin{align}
+ \frac{1}{T_1} - \frac{1}{T_0} \ge \frac{R}{E_a}\epsilon
+\end{align}
+
 
 
 \begin{figure}

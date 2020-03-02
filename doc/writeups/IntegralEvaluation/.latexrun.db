@@ -63,16 +63,9 @@
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm"
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr6.tfm"
           ],
-          "ab6ecb4aaba9ca1b4259b1d1f64309a785bbaeb09183fd79a066b7764a448a28"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty"
-          ],
-          "299bcbcf28ad66ded64e1df1d030f3d0d9834b82a1a4107987512fdecb0a61dd"
+          "106afa9172f0c00e58b9f5cbc72b302a18aaeeaddf50caca145af9cc0b81afd2"
         ],
         [
           "file",
@@ -84,310 +77,9 @@
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm"
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb"
           ],
-          "87f2d8981927644cbecaf3d639e96e348ea4e7be49d8804468bd8ba9ff3f5244"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm"
-          ],
-          "3f56ab22f7fc6a015813976c6c6cc2fd55736bbaec4958a4562e10719fa18062"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty"
-          ],
-          "7c96617103e4523b4a74b114c859d46fc7bdde8beb93528869af8e81aed8c307"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm"
-          ],
-          "86b6e8a52aae6ad1655e32099e12bd2904b158aba4c8afb74143266d2d9cd18f"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty"
-          ],
-          "0282c99e41d92773852a6839b2b568a0b6d0fb31c6b4695a687a3b36fccb8fd2"
-        ],
-        [
-          "file",
-          [
-            "Arrhenius_Integral_Quadrature.bbl"
-          ],
-          "68057effffb73aad6d62bd40bc12bb971c4d5505eb861a6827119e4fa1ca1a78"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/web2c/texmf.cnf"
-          ],
-          "76c76e44fad3e14eef7a69e222a4aca764a7d18e162bc3a85b467b96a0dfdda2"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb"
-          ],
-          "5b293a581ddb937b02559c3ce1a60184cc434295533204a2cd3864a6ad8a1f53"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm"
-          ],
-          "137eb9f38f661c66309614066a7b5d63d8969d33aba0c9efee9f844a4ce65b50"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm"
-          ],
-          "156417e26b9a51c7e052d5fdb3db7b25f10d4fa0d094180ae7834894189a0a0b"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty"
-          ],
-          "21cb774d4496c08bbf39b967fdb72cffbc5e7c39336c834841fbc717d8ab12ef"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty"
-          ],
-          "7ee11dc4452e179da2c35321e87618f65adaf89da2c5297ef78ee7e4462a80bd"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty"
-          ],
-          "149617e866d4fc02b381d00cea4fcc77b896bf3f3a2790427c0a68b31a6da415"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo"
-          ],
-          "66d7f53f03f56f3d2296d0f8b647ac1f8e5119cf59286949cbc02e4da3547227"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/unicode-data/CaseFolding.txt"
-          ],
-          "97b43ed3f4b80572c2114200e5e43a6b923d984c74a6caaf27de5b8462c04cb0"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb"
-          ],
-          "c838238f31d86a9f198873dfaf501601a4fc966845b9c59e7dc251c4e85d1f1f"
-        ],
-        [
-          "file",
-          [
-            "/var/lib/texmf/web2c/pdftex/pdflatex.fmt"
-          ],
-          "86affe488c9cf4316d6b36bb3f5eea3d11b1ad4c51187914aef9b43a425c53a3"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty"
-          ],
-          "2166b8755edd4390ddc9bf7ddbeac6a508b3aa5164cb1ced94afab6339a06ba8"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb"
-          ],
-          "b6f162e1549a649c7e9b2edfb77306f60e1b0da74547f33cba39ff6ba0bdd473"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def"
-          ],
-          "ec21beaab39b6b01b7ff6145f793bdc0c2152025f856969517754affa86cd56e"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm"
-          ],
-          "0ca13d421ac7133271aed7c935099ecf3d1d08ac9e15f81acb34a16564ab8a46"
-        ],
-        [
-          "file",
-          [
-            "/etc/texmf/web2c/texmf.cnf"
-          ],
-          "3443c7e22fbb4585732473f7e95d3cbf3e8657100f9117e711e2af5b0db85a40"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/preprint/fullpage.sty"
-          ],
-          "4c8c3d3547763239254e4c376ab9e459210de71de63993826fbe72fb3b0f11eb"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb"
-          ],
-          "62ee8cef552017551cd3e026a483e700730103eceaad959c87b7730017f59cff"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty"
-          ],
-          "252108ffe92ffcefcbab0b2d959f74a485085d4d2a39781597a5ad797d190239"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty"
-          ],
-          "2c42226e752f45346e8ac1671bd2f9fbbbe300d7ae4cb6929b332883666732fe"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb"
-          ],
-          "465827b4702e12f7deea159c8084753ffc27998963de516e490bd7bd5bed41dd"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm"
-          ],
-          "84c37f07ca360c41ad0a0fba7387d279d72457c69bdae03653208c683d8de6bc"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/physics/physics.sty"
-          ],
-          "56e7713ae66810ce759a4c2ad0990febe10446fc4c3c87cd37a522c8147087cc"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb"
-          ],
-          "b37e8671820b0753c6e233eaa3230c6ab9cff04e6c4baee312d60ae261e5aba1"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/base/article.cls"
-          ],
-          "21c148434e0986405bcbd765b7d121d9569dcca9f1081836cd0ab396fb70cc8d"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty"
-          ],
-          "6f863d9e8d7fa4dcc55986d420fa11b7c94c78f469858608f31931a8c65eec8c"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty"
-          ],
-          "2b204ae5556da0e585afabf038d4c4b0860830dfc36bf54e5dbd1c3e53b52517"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg"
-          ],
-          "1d7d241d7b0f362c763f7e5dfb8551b51607c033a0b46a57bab8dba424b454d2"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/unicode-data/SpecialCasing.txt"
-          ],
-          "e9947a0e86f27353f0e776403c4826675001210bd39d7114118a8864a57f7472"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss10.tfm"
-          ],
-          "431472f34665b6243a32936215f2e17d1f124cdf8513e86e2bedc4c3de3f980b"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss8.tfm"
-          ],
-          "25650d37e11bee41e03dc4757a1b6f1a64f27a53c664aa618d1a8ded54d96ed5"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii"
-          ],
-          "5dd3675b88c7b61d3703e6bf35ed75623acc6b163dff7b1477b485cee8ad71cb"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb"
-          ],
-          "e3661061e8aa474d6de5ffa916edceb0e3d8b998862018c147f0357fce00bcd7"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb"
-          ],
-          "9b58bfa828b9553b7c8331cf26c45443b836f8aab62e820b40a5b65c8531dd42"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty"
-          ],
-          "26c916f613d4d7fe4150a22e531ea66e80e8c6116ee3254ead94f6ba3ef0888e"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty"
-          ],
-          "89204782b8c09cfb1a7524c580a9cb81d38e01df7aa4f5831bbede55a64bf1fd"
-        ],
-        [
-          "file",
-          [
-            "Arrhenius_Integral_Quadrature.tex"
-          ],
-          "9322225bcac7882f4ea359d19c455d82a2bc81cd8580ac12995a6bb6cfec0150"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb"
-          ],
-          "84d38aac226b5274baca7a292e2039f5284a35d8a2ae31074a475fad87da310b"
+          "791b31aa1db8608d0144b3a40fc0fe53383a60f6b00d0e8fd9f06ac4a11df8cb"
         ],
         [
           "file",
@@ -399,6 +91,20 @@
         [
           "file",
           [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty"
+          ],
+          "149617e866d4fc02b381d00cea4fcc77b896bf3f3a2790427c0a68b31a6da415"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty"
+          ],
+          "4b6e94349101340e90db52d3042da0cd5868660ebde38d0267feda92a3cada31"
+        ],
+        [
+          "file",
+          [
             "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb"
           ],
           "46da57e5a06866efa9a20f3dd350811b5d3279a5ae789af63e530f1f570e3c7f"
@@ -406,58 +112,30 @@
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty"
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb"
           ],
-          "22cbb074c7079135f32f438c9a9f8f1ba475d9dda259d13e1ee3ec8e1d1b97da"
+          "e3661061e8aa474d6de5ffa916edceb0e3d8b998862018c147f0357fce00bcd7"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/latex/translator/translator.sty"
+            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty"
           ],
-          "9e06dc8a6eab8abe86bf0fe9ae5b2587f3c74bdd85d160345bd0445aa6b27cf7"
+          "2166b8755edd4390ddc9bf7ddbeac6a508b3aa5164cb1ced94afab6339a06ba8"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm"
+            "/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty"
           ],
-          "62f6142387fe8d4be3ba2d46034e76fd6c3fc1d22ab44663a4eaa3f42b97039e"
+          "d96edb812fa1145a27152b72c556ccdd523c9bb840db26b7d6be68cbfd6c5df8"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty"
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm"
           ],
-          "9a712c64bd704296da7b1b6a883d2c75a072810f6d0c40f74b791f69da1c230a"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm"
-          ],
-          "1ce8af37ed38e93940829d3540e494eaaddc5201758d036b9074467e70a738dc"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty"
-          ],
-          "cc1fa8e3e7c7569f193f2d2898412b382225474f955bb92f4c822c800c2bd02b"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty"
-          ],
-          "0acc7a7c6a40b8709ce8a4b1b8ff0a8bdf5c90b89d2388414157313d8bce3419"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm"
-          ],
-          "373172fe340e4aede5129b89d65f576bfb1fe6932bd55c38f60bcaa84f3d1188"
+          "87f2d8981927644cbecaf3d639e96e348ea4e7be49d8804468bd8ba9ff3f5244"
         ],
         [
           "file",
@@ -469,16 +147,37 @@
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty"
+            "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map"
           ],
-          "f5a3a3b1d50e2d783a00555c2380cc7a8e4b7ee3241e521a9cd9067b6bf84f97"
+          "289d05d37bb81a00180a31050a46dcbbc5108b703e85ebf5427d9841dbcd87f9"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def"
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb"
           ],
-          "cd15c4b1dbb2abbed8da459f3eb710c02374ea7136cef874b1d729591b7d063f"
+          "84d38aac226b5274baca7a292e2039f5284a35d8a2ae31074a475fad87da310b"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/unicode-data/CaseFolding.txt"
+          ],
+          "97b43ed3f4b80572c2114200e5e43a6b923d984c74a6caaf27de5b8462c04cb0"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb"
+          ],
+          "9b58bfa828b9553b7c8331cf26c45443b836f8aab62e820b40a5b65c8531dd42"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty"
+          ],
+          "0acc7a7c6a40b8709ce8a4b1b8ff0a8bdf5c90b89d2388414157313d8bce3419"
         ],
         [
           "file",
@@ -497,107 +196,58 @@
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty"
+            "/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii"
           ],
-          "10dae486375694ba967e47db56ed7ff874ba2d9f9108d12695e17a0bb7d01a05"
+          "5dd3675b88c7b61d3703e6bf35ed75623acc6b163dff7b1477b485cee8ad71cb"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty"
+            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty"
           ],
-          "8732677158b3ae30cde4f6baeea1ed8e0d91a7dbb0888beb272e4e4805de3edd"
+          "7c96617103e4523b4a74b114c859d46fc7bdde8beb93528869af8e81aed8c307"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm"
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb"
           ],
-          "46a66e937f809c4fbe317947b583a14b408aca41ecb835eca3be46391190432a"
+          "df327fc28dc3ce615dc91399f335ec2e1e646e34929936be16836875d5ffaf54"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb"
+            "/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty"
           ],
-          "791b31aa1db8608d0144b3a40fc0fe53383a60f6b00d0e8fd9f06ac4a11df8cb"
+          "cc1fa8e3e7c7569f193f2d2898412b382225474f955bb92f4c822c800c2bd02b"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty"
+            "/usr/share/texlive/texmf-dist/tex/generic/unicode-data/SpecialCasing.txt"
           ],
-          "4b6e94349101340e90db52d3042da0cd5868660ebde38d0267feda92a3cada31"
+          "e9947a0e86f27353f0e776403c4826675001210bd39d7114118a8864a57f7472"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss12.tfm"
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb"
           ],
-          "38ba636afc0e32d07c340b9ad747c33c6d4a4256ccb9e42ae9f7d3df11b3fe1a"
+          "62ee8cef552017551cd3e026a483e700730103eceaad959c87b7730017f59cff"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm"
+            "/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty"
           ],
-          "11f3331c958b696fd484fe45c28285622617a2593d7a34511a1d6b279e1578a2"
+          "22cbb074c7079135f32f438c9a9f8f1ba475d9dda259d13e1ee3ec8e1d1b97da"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr6.tfm"
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb"
           ],
-          "106afa9172f0c00e58b9f5cbc72b302a18aaeeaddf50caca145af9cc0b81afd2"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb"
-          ],
-          "fdcede8794018df5f2b58f0905fb20a2b418ed8f67b73ee12445855dfbe5b1be"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty"
-          ],
-          "d96edb812fa1145a27152b72c556ccdd523c9bb840db26b7d6be68cbfd6c5df8"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty"
-          ],
-          "814ec800651bd979061379228acbacd71d6ef9bf07431069100a5b46ac9d2e24"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty"
-          ],
-          "e49716972fb337a8224546c4dbebaa748724e0901ac4c363938d826938a207ac"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/generic/unicode-data/UnicodeData.txt"
-          ],
-          "52423e4d7492167b62f518f68d54db88930abbbff7f11edfcaec8f726498cab1"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty"
-          ],
-          "87e8f734e04bcc0dc79d118aac786e7cd5879442b4605dc18d6863b49c3d7b55"
-        ],
-        [
-          "file",
-          [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm"
-          ],
-          "0890bccea1dd4d27f001ac30e86c63af35bc803e0557c35aafb1903c8d208e92"
+          "b37e8671820b0753c6e233eaa3230c6ab9cff04e6c4baee312d60ae261e5aba1"
         ],
         [
           "file",
@@ -609,23 +259,30 @@
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb"
+            "/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty"
           ],
-          "583b65bd1857bffc2ab184fcb4aad4e70e12eb05c9ca9f1c58c9a00a86c8bccf"
+          "814ec800651bd979061379228acbacd71d6ef9bf07431069100a5b46ac9d2e24"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm"
+            "/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty"
           ],
-          "79563547084d85388e6909888f9fa7f5cad33bdda44ca6b25b362e1d301db539"
+          "2c42226e752f45346e8ac1671bd2f9fbbbe300d7ae4cb6929b332883666732fe"
         ],
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map"
+            "/etc/texmf/web2c/texmf.cnf"
           ],
-          "289d05d37bb81a00180a31050a46dcbbc5108b703e85ebf5427d9841dbcd87f9"
+          "3443c7e22fbb4585732473f7e95d3cbf3e8657100f9117e711e2af5b0db85a40"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb"
+          ],
+          "c838238f31d86a9f198873dfaf501601a4fc966845b9c59e7dc251c4e85d1f1f"
         ],
         [
           "file",
@@ -637,9 +294,149 @@
         [
           "file",
           [
+            "/usr/share/texlive/texmf-dist/tex/latex/physics/physics.sty"
+          ],
+          "56e7713ae66810ce759a4c2ad0990febe10446fc4c3c87cd37a522c8147087cc"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb"
+          ],
+          "fdcede8794018df5f2b58f0905fb20a2b418ed8f67b73ee12445855dfbe5b1be"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def"
+          ],
+          "ec21beaab39b6b01b7ff6145f793bdc0c2152025f856969517754affa86cd56e"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/web2c/texmf.cnf"
+          ],
+          "76c76e44fad3e14eef7a69e222a4aca764a7d18e162bc3a85b467b96a0dfdda2"
+        ],
+        [
+          "file",
+          [
+            "Arrhenius_Integral_Quadrature.tex"
+          ],
+          "a98c4fa4a45485fa2e4ffe959f316c8b44f306a64a16c5f176f236e47f369939"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty"
+          ],
+          "2b204ae5556da0e585afabf038d4c4b0860830dfc36bf54e5dbd1c3e53b52517"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm"
+          ],
+          "46a66e937f809c4fbe317947b583a14b408aca41ecb835eca3be46391190432a"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb"
+          ],
+          "583b65bd1857bffc2ab184fcb4aad4e70e12eb05c9ca9f1c58c9a00a86c8bccf"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm"
+          ],
+          "84c37f07ca360c41ad0a0fba7387d279d72457c69bdae03653208c683d8de6bc"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def"
+          ],
+          "cd15c4b1dbb2abbed8da459f3eb710c02374ea7136cef874b1d729591b7d063f"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm"
+          ],
+          "79563547084d85388e6909888f9fa7f5cad33bdda44ca6b25b362e1d301db539"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss12.tfm"
+          ],
+          "38ba636afc0e32d07c340b9ad747c33c6d4a4256ccb9e42ae9f7d3df11b3fe1a"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm"
+          ],
+          "62f6142387fe8d4be3ba2d46034e76fd6c3fc1d22ab44663a4eaa3f42b97039e"
+        ],
+        [
+          "file",
+          [
             "/usr/share/texlive/texmf-dist/tex/latex/translator/translator-basic-dictionary-English.dict"
           ],
           "944ec543284255b7fa95e9d3716c0f60b82eb7c165bd12731b43140253f2566b"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/preprint/fullpage.sty"
+          ],
+          "4c8c3d3547763239254e4c376ab9e459210de71de63993826fbe72fb3b0f11eb"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty"
+          ],
+          "89204782b8c09cfb1a7524c580a9cb81d38e01df7aa4f5831bbede55a64bf1fd"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty"
+          ],
+          "8732677158b3ae30cde4f6baeea1ed8e0d91a7dbb0888beb272e4e4805de3edd"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss10.tfm"
+          ],
+          "431472f34665b6243a32936215f2e17d1f124cdf8513e86e2bedc4c3de3f980b"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm"
+          ],
+          "86b6e8a52aae6ad1655e32099e12bd2904b158aba4c8afb74143266d2d9cd18f"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/base/article.cls"
+          ],
+          "21c148434e0986405bcbd765b7d121d9569dcca9f1081836cd0ab396fb70cc8d"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm"
+          ],
+          "0890bccea1dd4d27f001ac30e86c63af35bc803e0557c35aafb1903c8d208e92"
         ],
         [
           "file",
@@ -651,16 +448,37 @@
         [
           "file",
           [
-            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm"
+            "/usr/share/texlive/texmf-dist/tex/generic/unicode-data/UnicodeData.txt"
           ],
-          "4c5ae243ac0aa254e7ec7f0602cc2a4351e5011ff0cb6dc150a5f6de19585de6"
+          "52423e4d7492167b62f518f68d54db88930abbbff7f11edfcaec8f726498cab1"
         ],
         [
           "file",
           [
-            "Arrhenius_Integral_Quadrature.aux"
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm"
           ],
-          "d85a63b2f5b410f6957e9bde7ee87af5af6a36c0a7ab512da8fa0707e5e7e00a"
+          "11f3331c958b696fd484fe45c28285622617a2593d7a34511a1d6b279e1578a2"
+        ],
+        [
+          "file",
+          [
+            "arrhenius_rate.png"
+          ],
+          "62bda85aeb412e2443ae758404947392143586c49f4e62f61432777b21dd2ced"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty"
+          ],
+          "0282c99e41d92773852a6839b2b568a0b6d0fb31c6b4695a687a3b36fccb8fd2"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb"
+          ],
+          "465827b4702e12f7deea159c8084753ffc27998963de516e490bd7bd5bed41dd"
         ],
         [
           "file",
@@ -672,30 +490,226 @@
         [
           "file",
           [
-            "Arrhenius_Integral_Quadrature.pdf"
+            "/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty"
           ],
-          "c91dcbe30d919079d643189c94abc1b6e48e343ccbbada607de3e9e969f14d72"
+          "9a712c64bd704296da7b1b6a883d2c75a072810f6d0c40f74b791f69da1c230a"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss8.tfm"
+          ],
+          "25650d37e11bee41e03dc4757a1b6f1a64f27a53c664aa618d1a8ded54d96ed5"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb"
+          ],
+          "b6f162e1549a649c7e9b2edfb77306f60e1b0da74547f33cba39ff6ba0bdd473"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm"
+          ],
+          "373172fe340e4aede5129b89d65f576bfb1fe6932bd55c38f60bcaa84f3d1188"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty"
+          ],
+          "21cb774d4496c08bbf39b967fdb72cffbc5e7c39336c834841fbc717d8ab12ef"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm"
+          ],
+          "4c5ae243ac0aa254e7ec7f0602cc2a4351e5011ff0cb6dc150a5f6de19585de6"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm"
+          ],
+          "ab6ecb4aaba9ca1b4259b1d1f64309a785bbaeb09183fd79a066b7764a448a28"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx-abbreviations.cfg"
+          ],
+          "1d7d241d7b0f362c763f7e5dfb8551b51607c033a0b46a57bab8dba424b454d2"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/translator/translator.sty"
+          ],
+          "9e06dc8a6eab8abe86bf0fe9ae5b2587f3c74bdd85d160345bd0445aa6b27cf7"
+        ],
+        [
+          "file",
+          [
+            "/var/lib/texmf/web2c/pdftex/pdflatex.fmt"
+          ],
+          "86affe488c9cf4316d6b36bb3f5eea3d11b1ad4c51187914aef9b43a425c53a3"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty"
+          ],
+          "e49716972fb337a8224546c4dbebaa748724e0901ac4c363938d826938a207ac"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm"
+          ],
+          "1ce8af37ed38e93940829d3540e494eaaddc5201758d036b9074467e70a738dc"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm"
+          ],
+          "3f56ab22f7fc6a015813976c6c6cc2fd55736bbaec4958a4562e10719fa18062"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty"
+          ],
+          "252108ffe92ffcefcbab0b2d959f74a485085d4d2a39781597a5ad797d190239"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo"
+          ],
+          "66d7f53f03f56f3d2296d0f8b647ac1f8e5119cf59286949cbc02e4da3547227"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm"
+          ],
+          "137eb9f38f661c66309614066a7b5d63d8969d33aba0c9efee9f844a4ce65b50"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/siunitx/siunitx.sty"
+          ],
+          "10dae486375694ba967e47db56ed7ff874ba2d9f9108d12695e17a0bb7d01a05"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty"
+          ],
+          "6f863d9e8d7fa4dcc55986d420fa11b7c94c78f469858608f31931a8c65eec8c"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm"
+          ],
+          "0ca13d421ac7133271aed7c935099ecf3d1d08ac9e15f81acb34a16564ab8a46"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb"
+          ],
+          "5b293a581ddb937b02559c3ce1a60184cc434295533204a2cd3864a6ad8a1f53"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm"
+          ],
+          "156417e26b9a51c7e052d5fdb3db7b25f10d4fa0d094180ae7834894189a0a0b"
+        ],
+        [
+          "file",
+          [
+            "Arrhenius_Integral_Quadrature.aux"
+          ],
+          "bf0f2f4836c548010f064dbbd8006aec7834e00dd3740b4806eabdd318452843"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty"
+          ],
+          "87e8f734e04bcc0dc79d118aac786e7cd5879442b4605dc18d6863b49c3d7b55"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty"
+          ],
+          "f5a3a3b1d50e2d783a00555c2380cc7a8e4b7ee3241e521a9cd9067b6bf84f97"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty"
+          ],
+          "7ee11dc4452e179da2c35321e87618f65adaf89da2c5297ef78ee7e4462a80bd"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty"
+          ],
+          "26c916f613d4d7fe4150a22e531ea66e80e8c6116ee3254ead94f6ba3ef0888e"
+        ],
+        [
+          "file",
+          [
+            "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty"
+          ],
+          "299bcbcf28ad66ded64e1df1d030f3d0d9834b82a1a4107987512fdecb0a61dd"
+        ],
+        [
+          "file",
+          [
+            "Arrhenius_Integral_Quadrature.bbl"
+          ],
+          "68057effffb73aad6d62bd40bc12bb971c4d5505eb861a6827119e4fa1ca1a78"
         ],
         [
           "file",
           [
             "./Arrhenius_Integral_Quadrature.fls"
           ],
-          "da8be65a5bafbadd41d5a18aca8ec0b1b7c002f76b5a8889b4f9a9bd510bbaab"
+          "5e3b17fd616769bd9af7fc61cf0bfbb3650e17e9f0e3b1b26bfc232d9f419824"
+        ],
+        [
+          "file",
+          [
+            "Arrhenius_Integral_Quadrature.pdf"
+          ],
+          "d2fac0b83eba293404d052067732c6527ad4e66499e24e912c59f1aff7cf7ea7"
         ],
         [
           "file",
           [
             "Arrhenius_Integral_Quadrature.log"
           ],
-          "6ec1ae9f9bdbfd412b3a5a63b1950135b9123ebc904382cad9793a3112028a73"
+          "481c67fe2415fbaf36b5eb212fc292c2e5ea497d850db3a4fdfc0da87d23869f"
         ]
       ],
       "output_files": {
-        "Arrhenius_Integral_Quadrature.pdf": "c91dcbe30d919079d643189c94abc1b6e48e343ccbbada607de3e9e969f14d72",
-        "./Arrhenius_Integral_Quadrature.fls": "da8be65a5bafbadd41d5a18aca8ec0b1b7c002f76b5a8889b4f9a9bd510bbaab",
-        "Arrhenius_Integral_Quadrature.aux": "d85a63b2f5b410f6957e9bde7ee87af5af6a36c0a7ab512da8fa0707e5e7e00a",
-        "Arrhenius_Integral_Quadrature.log": "6ec1ae9f9bdbfd412b3a5a63b1950135b9123ebc904382cad9793a3112028a73"
+        "./Arrhenius_Integral_Quadrature.fls": "5e3b17fd616769bd9af7fc61cf0bfbb3650e17e9f0e3b1b26bfc232d9f419824",
+        "Arrhenius_Integral_Quadrature.pdf": "d2fac0b83eba293404d052067732c6527ad4e66499e24e912c59f1aff7cf7ea7",
+        "Arrhenius_Integral_Quadrature.aux": "bf0f2f4836c548010f064dbbd8006aec7834e00dd3740b4806eabdd318452843",
+        "Arrhenius_Integral_Quadrature.log": "481c67fe2415fbaf36b5eb212fc292c2e5ea497d850db3a4fdfc0da87d23869f"
       },
       "extra": {
         "jobname": "./Arrhenius_Integral_Quadrature",
@@ -811,10 +825,10 @@
     }
   },
   "clean": {
-    "./Arrhenius_Integral_Quadrature.fls": "da8be65a5bafbadd41d5a18aca8ec0b1b7c002f76b5a8889b4f9a9bd510bbaab",
-    "Arrhenius_Integral_Quadrature.pdf": "c91dcbe30d919079d643189c94abc1b6e48e343ccbbada607de3e9e969f14d72",
-    "Arrhenius_Integral_Quadrature.log": "6ec1ae9f9bdbfd412b3a5a63b1950135b9123ebc904382cad9793a3112028a73",
-    "Arrhenius_Integral_Quadrature.aux": "d85a63b2f5b410f6957e9bde7ee87af5af6a36c0a7ab512da8fa0707e5e7e00a",
+    "./Arrhenius_Integral_Quadrature.fls": "5e3b17fd616769bd9af7fc61cf0bfbb3650e17e9f0e3b1b26bfc232d9f419824",
+    "Arrhenius_Integral_Quadrature.pdf": "d2fac0b83eba293404d052067732c6527ad4e66499e24e912c59f1aff7cf7ea7",
+    "Arrhenius_Integral_Quadrature.log": "481c67fe2415fbaf36b5eb212fc292c2e5ea497d850db3a4fdfc0da87d23869f",
+    "Arrhenius_Integral_Quadrature.aux": "bf0f2f4836c548010f064dbbd8006aec7834e00dd3740b4806eabdd318452843",
     "./Arrhenius_Integral_Quadrature.bbl": "68057effffb73aad6d62bd40bc12bb971c4d5505eb861a6827119e4fa1ca1a78",
     "./Arrhenius_Integral_Quadrature.blg": "977ede5cf0d2743b5c031ef1ceb0dd228d1401dc596656d4fabcd60fdc9f24cc"
   }

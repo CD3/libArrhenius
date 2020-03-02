@@ -17,6 +17,7 @@ namespace libArrhenius {
 
 
 struct Trapezoid {};
+struct ExponentialIntegral {};
 
 /** @class ArrheniusIntegral
   * @brief 
@@ -30,6 +31,7 @@ class ArrheniusIntegral {};
 // include specific implementations here as they
 // won't work if the user tries to include them directly
 #include "./detail/ArrheniusIntegral/Trapezoid.hpp"
+#include "./detail/ArrheniusIntegral/ExponentialIntegral.hpp"
 
 
 #endif // include protector
