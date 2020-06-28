@@ -1,3 +1,9 @@
 *.blg
 *.log
 *.synctex.gz
+*.bbl
+*.db
+*.db.lock
+*.aux
+*.bbl
+*.fls

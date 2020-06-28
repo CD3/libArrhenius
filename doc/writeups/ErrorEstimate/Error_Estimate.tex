@@ -1,0 +1,68 @@
+% arara: pdflatex
+% arara: bibtex
+% arara: pdflatex
+% arara: pdflatex
+\documentclass{article}
+
+\usepackage{graphicx}  % for including graphics
+\usepackage{amsmath}   % math symbols like operator notation
+\usepackage{siunitx}     % properly format quantities with units
+\usepackage{fancyhdr}  % control headers
+\usepackage{physics}
+\usepackage{fullpage}
+
+\title{Estimating Error for Numerical Evaluation of the Arrhenius Integral}
+\author{C.D. Clark III}
+
+
+\begin{document}
+\maketitle
+
+The Arrhenius
+Integral model for thermal damage requires the evaluation of the integral\cite{WELCH--2011--optical-thermalresponseoflaser-irradiatedtissue}
+\begin{equation}
+  \label{eqn:arr}
+  \Omega\qty(\tau) = \int\limits_{0}^{\tau} A e^{\frac{-Ea}{RT\qty(t)}} dt.
+\end{equation}
+For all but the simplest thermal profiles, this integral must be numerically evaluated. We would like to estimate the error accumulated
+during numerical evaluation.
+
+Assume that we have a thermal profile sampled at discrete times $\qty{t_i}$. If the temperature between any two
+times is a monotonic function between the temperature at each time, then the accumulated damage between the
+two times must be greater than the damage that would accumulate at minimum temperature over the time interval,
+and the damage that would accumulate at the maximum temperature over the time interval.
+
+Let $T_i$ be the temperature at the time $t_i$. The accumulated damage over the interval $\qty[t_i,t_{i+1}]$ will
+satisfy
+\begin{equation}
+  A e^{\frac{-Ea}{R\min(T_i,T_{i+1})}} \tau
+  \ge
+  \Omega
+  \ge
+  A e^{\frac{-Ea}{R\max(T_i,T_{i+1})}} \tau
+\end{equation}
+
+A numerical implementation will need to check for the case that $T_0 = T_1$ and use the constant temperature quadrature. If $T_0$ and $T_1$ are stored as floating point numbers, then
+we will probably need to check that they are ``close'', rather than ``equal''. Note that, for a linear temperature rise from $T_0$ and $T_1$, evaluating Equation \ref{eq:quadrature} will
+to give a numerical value between $Ae^{-E_a/RT_0}(t_1 - t_0)$ and $Ae^{-E_a/RT_1}(t_1 - t_0)$. We can therefore write a limit on the maximum error in incurred by any numerical approximation to integral over duration $t_1 - t_0$.
+\begin{align}
+  \epsilon \le \frac{\abs{ Ae^{-E_a/RT_1}(t_1 - t_0) - Ae^{-E_a/RT_0}(t_1 - t_0)} }{Ae^{-E_a/RT_0}(t_1 - t_0)} = \abs{e^{-\frac{E_a}{R} \qty(\frac{1}{T_1} - \frac{1}{T_0})} - 1}
+\end{align}
+This gives a metric for deciding if $T_1$ and $T_0$ are ``close enough''. Given a tolerance, or maximum allowed error, we 
+\begin{align}
+  \frac{R}{E_a} \ln \qty( \epsilon + 1 ) \le \abs{ \frac{1}{T_1} - \frac{1}{T_0} }
+\end{align}
+For small $\epsilon$, $\ln \qty(\epsilon + 1) \approx \epsilon$,
+\begin{align}
+ \frac{1}{T_1} - \frac{1}{T_0} \ge \frac{R}{E_a}\epsilon
+\end{align}
+
+
+
+
+
+\bibliography{references_database}
+\bibliographystyle{plain}
+
+
+\end{document}
