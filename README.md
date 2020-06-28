@@ -14,7 +14,54 @@ When ![1](http://latex.codecogs.com/gif.latex?\Omega\ge%201), the tissue is dama
 
 # Getting Started
 
-## Examples
+`libArrenius` is a library that provides utilities for evaluating the Arrhenius damage integral, computing
+damage threshold scaling factors for a given thermal profile, and even fitting the Arrhenius parameters to a
+set of thermal profiles.
+
+For convenience, a CLI is also provided. If all you want to do is evaluate the damage integral, or compute
+the damage threshold scaling factor for a given thermal profile, the CLI is the easiest to use.
+
+## Building and Using the CLI
+
+To build the CLI, install its dependencies with conan (Boost and Eigen3), and then use CMake to configure and build.
+
+```
+$ mkdir build
+$ conan install ..
+$ cmake ../applications
+$ cmake --build .
+```
+
+This will create an executable named `Arrhenius-cli`. You can check that it runs with the `-h` option.
+```
+$ ./Arrhenius-cli -h
+```
+
+The CLI provides multiple sub-commands for performing certain actions. To evaluate the damage integral for
+a thermal profile stored in a file named `Tvst.txt` (the file needs to be in gnuplot format), use the `calc-damage`
+sub-command.
+```
+$ ./Arrhenius-cli calc-damage Tvst.txt 
+```
+By default, the Welch-Polhamus coefficients for Retinal damage are used. These can be overridden with
+command line options.
+
+## Library Examples
+
+`libArrenius` is a header-only library, but it if you install it, it will provide 
+a CMake config file that works with CMake's
+`find_package(...)` command to provide a target named `libArrenius::Arrhenius`. To build and install the library,
+you will need to have Boost and Eigen3. A conanfile is provided to automatically install the dependencies.
+
+```
+$ mkdir build
+$ conan install ..
+$ cmake ..
+$ cmake --build . --target install
+```
+
+To use the library, add a `find_package(libArrenius)` call to your `CMakeLists.txt` and link against `libArrenius::Arrhenius` target.
+
 
 ### Evaluating the Arrhenius Integral
 
