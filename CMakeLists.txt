@@ -22,10 +22,10 @@ GIT_VERSION(${PROJECT_NAME})
 message(STATUS "${PROJECT_NAME} version: ${${PROJECT_NAME}_VERSION_FULL}")
 
 # need to run configure_file twice
-configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}/${PROJECT_NAME}_version.h.in"
-                "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/${PROJECT_NAME}_version.h")
-configure_file( "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/${PROJECT_NAME}_version.h"
-                "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/${PROJECT_NAME}_version.h")
+configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}/version.h.in"
+                "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/version.h")
+configure_file( "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/version.h"
+                "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/version.h")
 
 if( EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake" )
   include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -41,7 +41,7 @@ add_library( ${LIB_NAME} INTERFACE )
 add_library( ${PROJECT_NAME}::${LIB_NAME} ALIAS ${LIB_NAME})
 target_include_directories( ${LIB_NAME} INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/src>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 )
 target_compile_features( ${LIB_NAME} INTERFACE cxx_std_11 )

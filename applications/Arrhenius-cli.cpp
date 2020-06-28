@@ -14,8 +14,9 @@ namespace logging = boost::log;
 #include <boost/multiprecision/cpp_dec_float.hpp>
 using namespace boost::multiprecision;
 
-#include "Arrhenius.hpp"
-#include "Utils/GenerateOutputFilename.hpp"
+#include <libArrhenius/version.h>
+#include <libArrhenius/Arrhenius.hpp>
+#include <libArrhenius/Utils/GenerateOutputFilename.hpp>
 
 namespace po = boost::program_options;
 using namespace std;
