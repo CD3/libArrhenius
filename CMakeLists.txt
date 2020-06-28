@@ -27,6 +27,10 @@ configure_file( "${CMAKE_CURRENT_SOURCE_DIR}/src/${PROJECT_NAME}/${PROJECT_NAME}
 configure_file( "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/${PROJECT_NAME}_version.h"
                 "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/${PROJECT_NAME}_version.h")
 
+if( EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake" )
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup()
+endif()
 
 set( Boost_USE_STATIC_LIBS ON)
 find_package( Boost REQUIRED COMPONENTS log )
