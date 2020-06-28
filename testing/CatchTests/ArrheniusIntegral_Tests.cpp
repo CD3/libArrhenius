@@ -108,7 +108,7 @@ TEST_CASE("ArrheniusIntegral Large Profile", "[integral]")
     {
       ArrheniusIntegral<double, ExponentialIntegral> Arr(A, Ea);
       Omega = Arr(N, t.data(), T.data());
-      CHECK(Omega == Approx(Exact));
+      CHECK(Omega == Approx(Exact).epsilon(0.05));
     }
   }
 

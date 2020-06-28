@@ -2,6 +2,7 @@
 #define Integration_detail_ExponentialIntegral_hpp
 
 #include <boost/math/special_functions/expint.hpp>
+#include <iostream>
 
 
 /** @file ExponentialIntegral.hpp
@@ -37,26 +38,26 @@ class ArrheniusIntegral<Real,ExponentialIntegral> : public ArrheniusIntegralBase
     {
       Real sum = 0;
       Real alpha = Ea/Constants::MKS::R;
-      Real tolerance = alpha*0.001;
+      Real tolerance = 0.001/alpha;
       // we need to have some way for each thread to tell if they have cached the first
       // calculation or not.
-      Real integrand_last;
+      Real quadrature_last;
       bool have_last = false;
 
 #define LOOP \
       for(size_t i = 1; i < N; ++i) \
       { \
-        Real integrand_now = T[i]*boost::math::expint(2,alpha/T[i] ); \
+        Real quadrature_now = T[i]*boost::math::expint(2,alpha/T[i] ); \
         if(!have_last) \
         { \
-          integrand_last = integrand_now; \
+          quadrature_last = quadrature_now; \
           have_last = true; \
           continue; \
         } \
         if( abs(1/T[i] - 1/T[i-1]) > tolerance ) \
         { \
-          sum += 0*(integrand_now - integrand_last)*(t[i]-t[i-1])/(T[i] - T[i-1]); \
-          integrand_last = integrand_now; \
+          sum += (quadrature_now - quadrature_last)*(t[i]-t[i-1])/(T[i] - T[i-1]); \
+          quadrature_last = quadrature_now; \
         } \
         else \
         { \
@@ -72,7 +73,7 @@ class ArrheniusIntegral<Real,ExponentialIntegral> : public ArrheniusIntegralBase
       {
         // we have to use a special reduction function here
         #pragma omp declare reduction( add:Real:omp_out=Integration::detail::add(omp_out, omp_in) )initializer(omp_priv=0)
-        #pragma omp parallel for schedule(static) reduction(add:sum) firstprivate(have_last) private(exp_last)
+        #pragma omp parallel for schedule(static) reduction(add:sum) firstprivate(have_last) private(quadrature_last)
         LOOP
       }
       sum *= A;
