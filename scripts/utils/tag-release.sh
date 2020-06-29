@@ -3,6 +3,13 @@
 tag=$1
 shift
 
+if [[ $(git branch --no-color | cut -d ' ' -f2) != "master" ]]
+then
+  echo "ERROR: not on master branch"
+  echo "checkout the master branch and try again."
+  exit 1
+fi
+
 if [[ -n $(git status --porcelain) ]]
 then
   echo "ERROR: working directory is not clean"
@@ -44,6 +51,8 @@ git add version.txt
 git commit -m "housekeeping: bumped version in version.txt"
 echo "tagging with ${tag}"
 git tag ${tag}
-git tag -f current-release
+git checkout current-release
+git merge master
+git checkout master
 git tag | grep ${tag}
 echo "Successfully tagged commit."
