@@ -117,7 +117,7 @@ TEST_CASE( "ArrheniusFitter Usage (effective exposures method)", "[usage]" ) {
 
   auto ret = fit.exec();
 
-  CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99).epsilon(0.2) ); // within 20%
+  CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99).epsilon(0.3) ); // within 30%
   CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5).epsilon(0.1) ); // within 10%
 
   

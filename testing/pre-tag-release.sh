@@ -39,7 +39,7 @@ cd app
 
 cat << EOF > main.cpp
 #include <iostream>
-#include <libArrhenius/libArrhenius_version.h>
+#include <libArrhenius/version.h>
 
 int main()
 {
