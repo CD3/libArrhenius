@@ -3,7 +3,7 @@
 tag=$1
 shift
 
-if [[ $(git branch --no-color | cut -d ' ' -f2) != "master" ]]
+if [[ $(git branch --no-color | grep '*' | cut -d ' ' -f2) != "master" ]]
 then
   echo "ERROR: not on master branch"
   echo "checkout the master branch and try again."
