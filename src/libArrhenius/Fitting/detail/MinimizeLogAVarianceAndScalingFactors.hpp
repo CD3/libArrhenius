@@ -83,12 +83,28 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
 
       // We need to get a range for Ea before we can run the minimization
       // function. So, we'll do a quick scan for the minimum.
-      Real Ea_lb = 0;
-      Real Ea_ub = 0;
+      // If the caller has specified a bound use it.
+      // otherwise, calculate one
+      Real Ea_lb = 1;
+      Real Ea_ub = 2;
 
-      BOOST_LOG_TRIVIAL(trace) << "Searching for upper bound on Ea";
-      int prec = std::numeric_limits<Real>::digits - 3;
+      if( this->minEa )
+      {
+        Ea_lb = this->minEa.get();
+      }
+
+      if( this->maxEa )
+      {
+        Ea_ub = this->maxEa.get();
+      }
+
+      int prec;
       boost::uintmax_t maxit;
+
+      if(!this->minEa || !this->maxEa)
+      {
+      BOOST_LOG_TRIVIAL(trace) << "Searching for upper bound on Ea";
+      prec = std::numeric_limits<Real>::digits - 3;
 
       {
         // If Ea is too large, then the Arrhenius integral will
@@ -160,9 +176,16 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
             min_cost = cost;
           }
         }
+        if(!this->minEa)
+        {
         Ea_lb = exp(min_lnEa + (i_of_min-1)*d_lnEa);
+        }
+        if(!this->maxEa)
+        {
         Ea_ub = exp(min_lnEa + (i_of_min+1)*d_lnEa);
+        }
         BOOST_LOG_TRIVIAL(trace) << "Minimum between " << Ea_lb << " and " << Ea_ub;
+      }
       }
 
       maxit = 1000;
@@ -199,9 +222,18 @@ class ArrheniusFit<Real,MinimizeLogAVarianceAndScalingFactors> : public Arrheniu
       Real A_lb = *std::min_element(As.begin(), As.end());
       Real A_ub = *std::max_element(As.begin(), As.end());
 
+      if(this->minA)
+      {
+        A_lb = this->minA.get();
+      }
+      if(this->maxA)
+      {
+        A_ub = this->maxA.get();
+      }
+
 
       maxit = 1000;
-      BOOST_LOG_TRIVIAL(trace) << "Searching for A with Cost minimization";
+      BOOST_LOG_TRIVIAL(trace) << "Searching for A with Cost minimization between " << A_lb << " and " << A_ub;
       auto A_min = brent_find_minima( A_cost, A_lb, A_ub, prec );
       ret.A = A_min.first;
 

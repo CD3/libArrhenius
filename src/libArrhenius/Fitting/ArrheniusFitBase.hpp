@@ -22,7 +22,7 @@ class ArrheniusFitBase : public ArrheniusFitInterface<Real>
   protected:
     std::vector<Real*> t,T;
     std::vector<size_t> N;
-    boost::optional<Real> minEa, maxEa;
+    boost::optional<Real> minEa, maxEa, minA, maxA;
     
   public:
     ArrheniusFitBase (){};
@@ -44,8 +44,13 @@ class ArrheniusFitBase : public ArrheniusFitInterface<Real>
 
     void setMinEa( Real minEa_ ) { minEa = minEa_; }
     void setMaxEa( Real maxEa_ ) { maxEa = maxEa_; }
-    Real getMinEa( ) const { return minEa.get(); }
-    Real getMaxEa( ) const { return maxEa.get(); }
+    boost::optional<Real> getMinEa( ) const { return minEa; }
+    boost::optional<Real> getMaxEa( ) const { return maxEa; }
+
+    void setMinA( Real minA_ ) { minA = minA_; }
+    void setMaxA( Real maxA_ ) { maxA = maxA_; }
+    boost::optional<Real> getMinA( ) const { return minA; }
+    boost::optional<Real> getMaxA( ) const { return maxA; }
 
   protected:
 };

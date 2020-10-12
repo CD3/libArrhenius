@@ -61,10 +61,50 @@ TEST_CASE( "ArrheniusFitter Usage (clark method)", "[usage]" ) {
     fit.addProfile( Ns[j], ts[j].get(), Ts[j].get() );
   }
 
+  SECTION("No limits")
+  {
   auto ret = fit.exec();
 
   CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99) );
   CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
+  }
+
+  SECTION("upper bound on Ea")
+  {
+  fit.setMaxEa(6e5);
+  auto ret = fit.exec();
+
+  CHECK( static_cast<double>(ret.A.get()) < 3.1e99 );
+  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6e5) );
+  }
+
+  SECTION("lower bound on Ea")
+  {
+  fit.setMinEa(6.5e5);
+  auto ret = fit.exec();
+
+  CHECK( static_cast<double>(ret.A.get()) > 3.1e99 );
+  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.5e5) );
+  }
+
+  SECTION("upper bound on A")
+  {
+  fit.setMaxA(3e99);
+  auto ret = fit.exec();
+
+  CHECK( static_cast<double>(ret.A.get()) == Approx( 3.e99) );
+  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
+  }
+
+  SECTION("lower bound on A")
+  {
+  fit.setMinA(3.2e99);
+  fit.setMaxA(3.3e99);
+  auto ret = fit.exec();
+
+  CHECK( static_cast<double>(ret.A.get()) == Approx( 3.2e99) );
+  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
+  }
 
   
 

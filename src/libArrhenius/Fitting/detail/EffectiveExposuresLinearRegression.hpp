@@ -40,7 +40,23 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
 
 
       // Get a range for Ea to evaluate A over
-      Real Ea_ub = 0;
+      // If the caller has specified a bound use it.
+      // otherwise, calculate one
+      Real Ea_lb = 1;
+      Real Ea_ub = 2;
+
+      if( this->minEa )
+      {
+        Ea_lb = this->minEa.get();
+      }
+
+      if( this->maxEa )
+      {
+        Ea_ub = this->maxEa.get();
+      }
+      else
+      {
+
       // If Ea is too large, then the Arrhenius integral will
       // return zero. The point at which this happens depends on the
       // data type being used. Basically, higher-precision types can
@@ -62,6 +78,7 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
         if( i == 0 || Ea_ub_range.first < Ea_ub )
           Ea_ub = Ea_ub_range.first;
       }
+      }
 
 
       // compute a set of (Ea,log(A)) pairs
@@ -69,7 +86,7 @@ class ArrheniusFit<Real,EffectiveExposuresLinearRegression> : public ArrheniusFi
       {
 
         // We'll calculate (Ea,log(A)) pairs for every half decade
-        int emin = 0;
+        int emin = static_cast<int>(log10(Ea_lb));
         int emax = static_cast<int>(log10(Ea_ub));
         Real de = 0.1;
         int num = 1+static_cast<int>((emax - emin) / de);

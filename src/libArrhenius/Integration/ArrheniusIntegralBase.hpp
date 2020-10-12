@@ -29,7 +29,7 @@ class ArrheniusIntegralBase
 
     template<typename T>
     void setEa( T Ea_ ) { Ea = Ea_; }
-    void getEa( ) const { return Ea; }
+    Real getEa( ) const { return Ea; }
 
     void setParallelThreshold( size_t t ) { parallel_threshold = t; }
     size_t getParallelThreshold( ) const { return parallel_threshold; }

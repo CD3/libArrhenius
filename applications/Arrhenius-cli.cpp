@@ -25,11 +25,11 @@ typedef cpp_dec_float_100 DataType;
 typedef cpp_dec_float_100 HPDataType; // high precision data type
 
 namespace std {
-  std::string to_string(cpp_dec_float_100 val)
-  {return static_cast<std::string>( val ); }
+  /* std::string to_string(cpp_dec_float_100 val) */
+  /* {return static_cast<std::string>( val ); } */
 
-  std::string to_string(cpp_dec_float_50 val)
-  {return static_cast<std::string>( val ); }
+  /* std::string to_string(cpp_dec_float_50 val) */
+  /* {return static_cast<std::string>( val ); } */
 }
 
 std::vector<std::pair<std::string,std::string>> cmds = { {"help","Print usage and exit."}

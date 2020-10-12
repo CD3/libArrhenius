@@ -29,6 +29,13 @@ class ArrheniusFitInterface
 
   virtual void setMinEa( Real minEa_ ) = 0;
   virtual void setMaxEa( Real maxEa_ ) = 0;
+  virtual boost::optional<Real> getMinEa( ) const = 0;
+  virtual boost::optional<Real> getMaxEa( ) const = 0;
+
+  virtual void setMinA( Real minA_ ) = 0;
+  virtual void setMaxA( Real maxA_ ) = 0;
+  virtual boost::optional<Real> getMinA( ) const = 0;
+  virtual boost::optional<Real> getMaxA( ) const = 0;
 
 
   protected:
