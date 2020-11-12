@@ -27,7 +27,9 @@ To build the CLI, install its dependencies with conan (Boost and Eigen3), and th
 
 ```
 $ mkdir build
+$ cd build
 $ conan install ..
+$ source activate.sh
 $ cmake ../applications
 $ cmake --build .
 ```
@@ -55,6 +57,7 @@ you will need to have Boost and Eigen3. A conanfile is provided to automatically
 
 ```
 $ mkdir build
+$ cd build
 $ conan install ..
 $ cmake ..
 $ cmake --build . --target install
