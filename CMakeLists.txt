@@ -35,6 +35,7 @@ endif()
 set( Boost_USE_STATIC_LIBS ON)
 find_package( Boost REQUIRED COMPONENTS log )
 find_package( Eigen3 3.3.1 REQUIRED ) # v3.3.1 adds support for cmake targets
+find_package( OpenMP )
 
 string( REGEX REPLACE "^lib" "" LIB_NAME ${PROJECT_NAME} )
 add_library( ${LIB_NAME} INTERFACE )
@@ -75,6 +76,7 @@ target_link_libraries(${LIB_NAME}
     Boost::boost
     Boost::log
     Eigen3::Eigen
+    $<$<TARGET_EXISTS:OpenMP::OpenMP_CXX>:OpenMP::OpenMP_CXX>
     )
 
 if( BUILD_TESTS AND STANDALONE )

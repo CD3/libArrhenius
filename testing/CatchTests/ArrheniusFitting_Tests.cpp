@@ -2,6 +2,7 @@
 #include "fakeit.hpp"
 
 #include <vector>
+#include <limits>
 
 #include <libArrhenius/Integration/ArrheniusIntegral.hpp>
 #include <libArrhenius/Fitting/ArrheniusFit.hpp>
@@ -16,7 +17,9 @@ using namespace libArrhenius;
 
 typedef cpp_dec_float_100 DataType;
 
-TEST_CASE( "ArrheniusFitter Usage (clark method)", "[usage]" ) {
+
+TEST_CASE( "ArrheniusFitter Usage", "[usage]" )
+{
 
   std::vector<double> taus = { 0.001, 0.01, 0.1, 1.0, 10.0 };
   std::vector<std::shared_ptr<DataType>> ts,Ts;
@@ -26,7 +29,6 @@ TEST_CASE( "ArrheniusFitter Usage (clark method)", "[usage]" ) {
   double Ea = 6.28e5;
 
   ThresholdCalculator< ArrheniusIntegral<DataType> > calc(A,Ea);
-  ArrheniusFit< DataType > fit;
 
   for( auto tau : taus )
   {
@@ -58,55 +60,82 @@ TEST_CASE( "ArrheniusFitter Usage (clark method)", "[usage]" ) {
     auto Omega = calc.Omega(Ns[j],ts[j].get(),Ts[j].get());
     CHECK( static_cast<double>(Omega) == Approx(1) );
 
-    fit.addProfile( Ns[j], ts[j].get(), Ts[j].get() );
   }
 
-  SECTION("No limits")
+
+  SECTION("Minimize Scaling Factors Method")
   {
-  auto ret = fit.exec();
+    ArrheniusFit< DataType, MinimizeScalingFactors > fit;
 
-  CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99) );
-  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
+    for( size_t j = 0; j < Ns.size(); ++j )
+    {
+      fit.addProfile( Ns[j], ts[j].get(), Ts[j].get() );
+    }
+
+    fit.exec();
   }
 
-  SECTION("upper bound on Ea")
+
+
+
+  SECTION("Minimize logA and Scaling Factors Method")
   {
-  fit.setMaxEa(6e5);
-  auto ret = fit.exec();
+    ArrheniusFit< DataType > fit;
 
-  CHECK( static_cast<double>(ret.A.get()) < 3.1e99 );
-  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6e5) );
+    for( size_t j = 0; j < Ns.size(); ++j )
+    {
+      fit.addProfile( Ns[j], ts[j].get(), Ts[j].get() );
+    }
+
+
+
+    SECTION("No limits")
+    {
+      auto ret = fit.exec();
+
+      CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99) );
+      CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
+    }
+
+    SECTION("upper bound on Ea")
+    {
+      fit.setMaxEa(6e5);
+      auto ret = fit.exec();
+
+      CHECK( static_cast<double>(ret.A.get()) < 3.1e99 );
+      CHECK( static_cast<double>(ret.Ea.get()) == Approx(6e5) );
+    }
+
+    SECTION("lower bound on Ea")
+    {
+      fit.setMinEa(6.5e5);
+      auto ret = fit.exec();
+
+      CHECK( static_cast<double>(ret.A.get()) > 3.1e99 );
+      CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.5e5) );
+    }
+
+    SECTION("upper bound on A")
+    {
+      fit.setMaxA(3e99);
+      auto ret = fit.exec();
+
+      CHECK( static_cast<double>(ret.A.get()) == Approx( 3.e99) );
+      CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
+    }
+
+    SECTION("lower bound on A")
+    {
+      fit.setMinA(3.2e99);
+      fit.setMaxA(3.3e99);
+      auto ret = fit.exec();
+
+      CHECK( static_cast<double>(ret.A.get()) == Approx( 3.2e99) );
+      CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
+    }
   }
 
-  SECTION("lower bound on Ea")
-  {
-  fit.setMinEa(6.5e5);
-  auto ret = fit.exec();
 
-  CHECK( static_cast<double>(ret.A.get()) > 3.1e99 );
-  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.5e5) );
-  }
-
-  SECTION("upper bound on A")
-  {
-  fit.setMaxA(3e99);
-  auto ret = fit.exec();
-
-  CHECK( static_cast<double>(ret.A.get()) == Approx( 3.e99) );
-  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
-  }
-
-  SECTION("lower bound on A")
-  {
-  fit.setMinA(3.2e99);
-  fit.setMaxA(3.3e99);
-  auto ret = fit.exec();
-
-  CHECK( static_cast<double>(ret.A.get()) == Approx( 3.2e99) );
-  CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
-  }
-
-  
 
 }
 
@@ -160,7 +189,7 @@ TEST_CASE( "ArrheniusFitter Usage (effective exposures method)", "[usage]" ) {
   CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99).epsilon(0.3) ); // within 30%
   CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5).epsilon(0.1) ); // within 10%
 
-  
+
 
 }
 
@@ -214,7 +243,7 @@ TEST_CASE( "ArrheniusFitter Usage (standard method)", "[usage]" ) {
   CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99).epsilon(0.01) );
   CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
 
-  
+
 
 }
 
@@ -267,8 +296,6 @@ TEST_CASE( "ArrheniusFitterInterface Usage", "[usage]" ) {
 
   CHECK( static_cast<double>(ret.A.get()) == Approx(3.1e99) );
   CHECK( static_cast<double>(ret.Ea.get()) == Approx(6.28e5) );
-
-  
 
 }
 
