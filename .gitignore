@@ -2,3 +2,5 @@ build/
 build-*/
 .*.swp
 .git-*
+CMakePresets.json
+CMakeUserPresets.json

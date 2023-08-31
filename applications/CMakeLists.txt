@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.1 )
+cmake_minimum_required( VERSION 3.25 )
 
 project(Arrenius-cli)
 find_package( Boost REQUIRED COMPONENTS program_options )

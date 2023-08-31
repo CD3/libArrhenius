@@ -1,12 +1,4 @@
-cmake_minimum_required( VERSION 3.14 )
-
-if( TARGET libArrhenius )
-  return()
-endif( TARGET libArrhenius )
-
-if( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR} )
-  set(STANDALONE ON)
-endif( )
+cmake_minimum_required( VERSION 3.25 )
 
 option( BUILD_TESTS "Build unit tests" ON )
 if( ${BUILD_TESTS} )
@@ -79,7 +71,7 @@ target_link_libraries(${LIB_NAME}
     $<$<TARGET_EXISTS:OpenMP::OpenMP_CXX>:OpenMP::OpenMP_CXX>
     )
 
-if( BUILD_TESTS AND STANDALONE )
+if( BUILD_TESTS )
 add_subdirectory( testing )
 endif()
 
