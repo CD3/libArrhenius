@@ -1,0 +1,11 @@
+[generators]
+CMakeDeps
+CMakeToolchain
+VirtualBuildEnv
+
+[requires]
+boost/1.81.0
+eigen/3.3.7
+
+[layout]
+cmake_layout
