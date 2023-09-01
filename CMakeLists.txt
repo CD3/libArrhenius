@@ -37,7 +37,7 @@ target_include_directories( ${LIB_NAME} INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-target_compile_features( ${LIB_NAME} INTERFACE cxx_std_11 )
+target_compile_features( ${LIB_NAME} INTERFACE cxx_std_14 )
 target_sources(
 ${LIB_NAME}
   INTERFACE
